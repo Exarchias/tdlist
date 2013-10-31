@@ -16,11 +16,6 @@ namespace bb
 
 class QTranslator;
 
-/*!
- * @brief Application object
- *
- *
- */
 
 class TDList : public QObject
 {

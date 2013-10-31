@@ -16,14 +16,9 @@ Helper::Helper() {
 }
 
 QString Helper::convertUTtoString(int unixTime) {
-
-	//Int converted = atoi((const char*)(unixTime.toUtf8().constData()));
-	return QString::number(unixTime);
-	/*
-	QDateTime timestamp;
-	timestamp.setTime_t(converted);
-	return timestamp.toString();
-*/}
+	//TODO converts unix timestamp to human readable time
+	return "";
+}
 
 void Helper::setclickedTaskId (int id) {
 

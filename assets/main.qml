@@ -22,36 +22,7 @@ NavigationPane {
             
             TaskList {
             }
-
-            //            attachedObjec            property variant listtodoObj
-            
-//            onCreationCompleted: {
-//                listtodoObj = listtodo.createObject(navigationPane);
-//                if (!listtodoObj)
-//                    listtodoObj = listtodo.createObject(navigationPane);
-//                
-//                listtodoObj.dataModel = Model.get();	            
-//                main_content.add(listtodoObj);
-//            }   
-// 
-//                
-//                ComponentDefinition {
-//                    id: listtodo
-//                    source: "mainList.qml"
-//                }
-//            ]
-            
-//            property variant listtodoObj
-//            
-//            onCreationCompleted: {
-//                listtodoObj = listtodo.createObject(navigationPane);
-//                if (!listtodoObj)
-//                    listtodoObj = listtodo.createObject(navigationPane);
-//                
-//                listtodoObj.dataModel = Model.get();	            
-//                main_content.add(listtodoObj);
-//            }   
-        
+     
         }
         
         actions: [

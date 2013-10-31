@@ -8,6 +8,7 @@ Container {
     ListView {
         id: listView
         
+        //Push new page
         function pushNewPage (page) {
             navigationPane.push(page);
         }
@@ -69,11 +70,7 @@ Container {
                         TapHandler {
                             
                             onTapped: {
-                                //taskCont.ListItem.view.CppHelper.setclickedTaskId(ListItemData.taskId);
                                 var page = infoPage.createObject();
-                                
-                                //navigationPane.push(page);
-                            
                                 taskCont.ListItem.view.pushNewPage(page);
                             	    
                             }

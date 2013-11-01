@@ -29,6 +29,10 @@ public:
 	//Change statuses of one or multiple tasks' at once
 	Q_INVOKABLE int changeStat (int dateCreated, int taskStatus);
 
+	Q_INVOKABLE QString getDesctiption(int id);
+	Q_INVOKABLE QString getDatetoFinish(int id);
+	Q_INVOKABLE int getStatus (int id);
+
 	Q_INVOKABLE ListModel* get();
 
 signals:

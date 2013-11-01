@@ -5,17 +5,24 @@ import list 1.0
 Container {
     id: listContainer    
            
+           
     ListView {
+        
+        property string touchedItem : ""
+           
         id: listView
         
         //Push new page
-        function pushNewPage (page) {
-            navigationPane.push(page);
+        function pushNewPage () {
+            mainpage.pushInfoPage()            
         }
         
-        
-        //property url inprogressIcon : 
-        
+        //Passes touched Item Id to c++ helper function
+        //Not the best way but I haven't found a better way to pass touched item to taskinfo page
+        function passTouchedItem (taskId) {
+            CppHelper.setclickedTaskId(taskId) 	   
+        }
+                
         dataModel: GroupDataModel {
             id: data
         
@@ -23,14 +30,15 @@ Container {
         
         
         listItemComponents: [
-            
+                
             ListItemComponent {
                 type: "item"
                 
+                               
                 id:listComponent
                 Container {
                     id: taskCont
-                    
+                                       
                     layout: StackLayout {
                     }
                     
@@ -52,17 +60,32 @@ Container {
                     Container {
                         id: dateTime
                         
+                        preferredWidth: 700
+                        
                         layout: DockLayout {
                         }
                         
                         Label {
+                            
+                            horizontalAlignment: HorizontalAlignment.Left
+                            verticalAlignment: VerticalAlignment.Center
+                            
                             id: datetofinish
                             text: ListItemData.DateCreated
                             textStyle {
                                 color: Color.create("#5c5c5c")
                                 fontStyle: FontStyle.Italic
                             }
-                        }    
+                        } 
+                        
+                        Label {
+                            id: statusLabel
+                            horizontalAlignment: HorizontalAlignment.Right
+                            verticalAlignment: VerticalAlignment.Center
+                            
+                            
+                            text: ListItemData.Status == "1" ? "In Progress" : "Done"
+                        }   
                     }
                     
                     gestureHandlers: [
@@ -70,8 +93,8 @@ Container {
                         TapHandler {
                             
                             onTapped: {
-                                var page = infoPage.createObject();
-                                taskCont.ListItem.view.pushNewPage(page);
+                                taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
+                                taskCont.ListItem.view.pushNewPage();
                             	    
                             }
                             

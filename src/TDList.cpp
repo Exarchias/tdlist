@@ -19,10 +19,10 @@ TDList::TDList(bb::cascades::Application *app) :
 
     mainModel = new ListModel();
 
-    Helper* help = new Helper();
+    Helper* Help = new Helper();
 
     qml->setContextProperty("Model" , mainModel);
-    qml->setContextProperty("CppHelper", help);
+    qml->setContextProperty("CppHelper", Help);
     qml->setContextProperty("context", this);
 
     // Create root object for the UI

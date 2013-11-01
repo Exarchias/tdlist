@@ -15,7 +15,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     Application app(argc, argv);
 
     qmlRegisterType<ListModel>("list", 1, 0, "lModel");
-    qmlRegisterType<Helper>("cpphelper", 1, 0, "cpphelp");
+    qmlRegisterType<Helper>("cpphelper", 1, 0, "Cpphelper");
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.
     new TDList(&app);

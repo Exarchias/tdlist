@@ -72,7 +72,7 @@ Container {
                         OrientationHandler {
                             onOrientationAboutToChange: {
                                 if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                	headerTitle = headerCont.ListItem.view.getHeight();
+                                    headerTitle = headerCont.ListItem.view.getHeight();
                                 else 
                                     headerTitle = headerCont.ListItem.view.getWidth();
                             }
@@ -84,87 +84,104 @@ Container {
             ListItemComponent {
                 type: "listitem"
                 id:listComponent
-                
                 Container {
                     id: taskCont
                     
                     layout: StackLayout {
+                        orientation: LayoutOrientation.LeftToRight
                     }
                     
                     Container {
-                        id: titleCont
+                        id: checkbox
                         
-                        Label {
-                            multiline: false
-                            text: ListItemData.Description
+                        
+                        CheckBox {
+                            verticalAlignment: VerticalAlignment.Center
                             
-                            textStyle {
-                                fontSize: FontSize.XLarge
-                                color: Color.White
-                                fontWeight: FontWeight.Bold
-                            }
                         }
                     }
                     
                     Container {
-                        id: dateTime
+                        id: taskInfoCont
                         
-                        preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
-                        
-                        layout: DockLayout {
+                        layout: StackLayout {
                         }
                         
-                        Label {
+                        Container {
+                            id: titleCont
                             
-                            horizontalAlignment: HorizontalAlignment.Left
-                            verticalAlignment: VerticalAlignment.Center
-                            
-                            id: datetofinish
-                            text: ListItemData.DateCreated
-                            textStyle {
-                                color: Color.create("#5c5c5c")
-                                fontStyle: FontStyle.Italic
+                            Label {
+                                multiline: false
+                                text: ListItemData.Description
+                                
+                                textStyle {
+                                    fontSize: FontSize.XLarge
+                                    color: Color.White
+                                    fontWeight: FontWeight.Bold
+                                }
                             }
-                        } 
+                        }
                         
-                        Label {
-                            id: statusLabel
-                            horizontalAlignment: HorizontalAlignment.Right
-                            verticalAlignment: VerticalAlignment.Center
+                        Container {
+                            id: dateTime
                             
+                            preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
                             
-                            text: ListItemData.Status == "1" ? "In Progress" : "Done"
-                        }   
+                            layout: DockLayout {
+                            }
+                            
+                            Label {
+                                
+                                horizontalAlignment: HorizontalAlignment.Left
+                                verticalAlignment: VerticalAlignment.Center
+                                
+                                id: datetofinish
+                                text: ListItemData.DateCreated
+                                textStyle {
+                                    color: Color.create("#5c5c5c")
+                                    fontStyle: FontStyle.Italic
+                                }
+                            } 
+                            
+                            Label {
+                                id: statusLabel
+                                horizontalAlignment: HorizontalAlignment.Right
+                                verticalAlignment: VerticalAlignment.Center
+                                
+                                
+                                text: ListItemData.Status == "1" ? "In Progress" : "Done"
+                            }   
+                        }
+                        
+                        gestureHandlers: [
+                            
+                            TapHandler {
+                                
+                                onTapped: {
+                                    taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
+                                    taskCont.ListItem.view.pushNewPage();
+                                
+                                }
+                                
+                                attachedObjects: ComponentDefinition {
+                                    id: infoPage;
+                                    source: "asset:///taskInfo.qml"                        
+                                }
+                            }
+                        ]
+                        
+                        attachedObjects: [
+                            OrientationHandler {
+                                id: handler
+                                onOrientationAboutToChange: {
+                                    if (OrientationSupport.orientation == UIOrientation.Portrait)
+                                        dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
+                                    else 
+                                        dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
+                                }
+                            }
+                        ]    
                     }
-                    
-                    gestureHandlers: [
-                        
-                        TapHandler {
-                            
-                            onTapped: {
-                                taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
-                                taskCont.ListItem.view.pushNewPage();
-                            
-                            }
-                            
-                            attachedObjects: ComponentDefinition {
-                                id: infoPage;
-                                source: "asset:///taskInfo.qml"                        
-                            }
-                        }
-                    ]
-                    
-                    attachedObjects: [
-                        OrientationHandler {
-                            id: handler
-                            onOrientationAboutToChange: {
-                                if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                	dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
-                                else 
-                                    dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
-                            }
-                        }
-                    ]    
                 }
             } // end of second ListItemComponent
         ]

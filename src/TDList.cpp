@@ -7,6 +7,7 @@
 
 #include "listModel.h"
 #include "Helper.h"
+#include "DeviceSettings.h"
 
 using namespace bb::cascades;
 
@@ -18,12 +19,13 @@ TDList::TDList(bb::cascades::Application *app) :
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
     mainModel = new ListModel();
-
     Helper* Help = new Helper();
+    DeviceSettings* device = new DeviceSettings();
 
     qml->setContextProperty("Model" , mainModel);
     qml->setContextProperty("CppHelper", Help);
     qml->setContextProperty("context", this);
+    qml->setContextProperty("Device", device);
 
     // Create root object for the UI
     AbstractPane *root = qml->createRootObject<AbstractPane>();

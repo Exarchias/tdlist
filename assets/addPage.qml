@@ -3,6 +3,25 @@ import list 1.0
 
 Page {
     
+    function getHeight () {
+        if (Device.getDevice() == 1)
+            return 1280;
+        else if(Device.getDevice() == 2)
+            return 720;
+        else if(Device.getDevice() == 3)
+            return 1280; 	
+    }
+    
+    function getWidth() {
+        if (Device.getDevice() == 1)
+            return 768;
+        else if(Device.getDevice() == 2)
+            return 720;
+        else if(Device.getDevice() == 3)
+            return 720; 	
+    }
+    
+    
     function saveClicked (desc, datetime) {
         
         if (Model.addNewTask(desc, datetime) == 0) {
@@ -14,32 +33,29 @@ Page {
     titleBar: TitleBar {
         
         kind: TitleBarKind.FreeForm
+        
         kindProperties: FreeFormTitleBarKindProperties {
+            
             Container {
                 
-                layout: StackLayout {
-                    orientation: LayoutOrientation.LeftToRight
+                layout: DockLayout {
                 }
-                leftPadding: 10
-                rightPadding: 10
                 
                 Button {
                     id: cancelBtn
                     text: "Cancel" 
+                    
+                    horizontalAlignment: HorizontalAlignment.Left
                     
                     onClicked: {
                         pop();
                     }
                 }
                 
-                Label {
-                    text: "Add A New Task"	
-                    multiline: enabled
-                }
-                
                 Button {
                     id: saveBtn
                     text: "Save"
+                    horizontalAlignment: HorizontalAlignment.Right
                     
                     onClicked: {
                         if (saveClicked(description.text, finishDatePicker.value) == 0) {
@@ -49,10 +65,8 @@ Page {
                         }                        
                     }
                 }
-            
             }
         }
-    
     }
     
     Container {
@@ -78,7 +92,7 @@ Page {
             }
             
             DateTimePicker {
-                
+                preferredWidth: OrientationSupport.orientation == UIOrientation.Portrait ? getWidth() : getHeight()
                 id: finishDatePicker
                 title: "Date To Finish"
                 maximum: "2038-01-19"
@@ -108,22 +122,16 @@ Page {
                 
                 horizontalAlignment: HorizontalAlignment.Left
             }
-            Container {
-                layout: StackLayout {
-                
+            DateTimePicker {
+                id: finishTimePicker
+                preferredWidth: OrientationSupport.orientation == UIOrientation.Portrait ? getWidth() : getHeight()
+                title: "Time To Finish"
+                mode: DateTimePickerMode.Time
+                layoutProperties: StackLayoutProperties {
                 }
-                
-                preferredWidth: Infinity.MAX_VALUE
-                DateTimePicker {
-                    id: finishTimePicker
-                    preferredWidth: Infinity.MAX_VALUE
-                    title: "Time To Finish"
-                    mode: DateTimePickerMode.Time
-                    layoutProperties: StackLayoutProperties {
-                    }
-                    verticalAlignment: VerticalAlignment.Center
-                }
+                verticalAlignment: VerticalAlignment.Center
             }
+            
             Label {
                 text: "Description:"
                 textStyle.color: Color.create("#DEDEDE")
@@ -138,7 +146,27 @@ Page {
             TextArea {
                 id: description
                 inputMode: TextAreaInputMode.Text
+                preferredHeight: OrientationSupport.orientation == UIOrientation.Portrait ? 250 : 100
+                
+                
             }	
         }
+        
+        attachedObjects: [
+            OrientationHandler {
+                onOrientationAboutToChange: {
+                    if (OrientationSupport.orientation == UIOrientation.Portrait) {
+                        finishDatePicker.preferredWidth = getHeight();
+                        finishTimePicker.preferredWidth = getHeight();
+                        description.preferredHeight = 100
+                    }
+                    else { 
+                        finishDatePicker.preferredWidth = getWidth();
+                        finishTimePicker.preferredWidth = getWidth();
+                        description.preferredHeight = 250
+                    }
+                }
+            }
+        ]
     }
 }

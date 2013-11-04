@@ -72,7 +72,7 @@ Container {
                         OrientationHandler {
                             onOrientationAboutToChange: {
                                 if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                	headerTitle = headerCont.ListItem.view.getHeight();
+                                    headerTitle = headerCont.ListItem.view.getHeight();
                                 else 
                                     headerTitle = headerCont.ListItem.view.getWidth();
                             }
@@ -159,7 +159,7 @@ Container {
                             id: handler
                             onOrientationAboutToChange: {
                                 if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                	dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
+                                    dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
                                 else 
                                     dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
                             }

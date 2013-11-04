@@ -7,7 +7,7 @@ NavigationPane {
     
     Page {
         id: mainpage
-        
+
         /*Title bar*/
         titleBar : TitleBar {
             title: "ToDo List"

@@ -4,12 +4,12 @@ import list 1.0
 
 Container {
     id: listContainer    
-           
-           
+    
+    
     ListView {
         
         property string touchedItem : ""
-           
+        
         id: listView
         
         //Push new page
@@ -22,7 +22,7 @@ Container {
         function passTouchedItem (taskId) {
             CppHelper.setclickedTaskId(taskId) 	   
         }
-                
+        
         dataModel: GroupDataModel {
             id: data
         
@@ -30,15 +30,33 @@ Container {
         
         
         listItemComponents: [
-                
+            
             ListItemComponent {
-                type: "item"
+                type: "header"
                 
-                               
+                Container {
+                    id: headerCont
+                    
+                    Label {
+                        text: ListItemData == "1" ? "In Progress" : "Done"
+                        textStyle.fontStyle: FontStyle.Italic
+                        textStyle.fontSize: FontSize.Large
+                        textStyle.fontWeight: FontWeight.Bold
+                        
+                        //Have to add exact width of a device
+                        preferredWidth: 1000
+                    }
+                    background: Color.create("##4e4e4e")
+                }
+            },
+            
+            ListItemComponent {
+                type: "listitem"
                 id:listComponent
+        
                 Container {
                     id: taskCont
-                                       
+                    
                     layout: StackLayout {
                     }
                     
@@ -87,7 +105,7 @@ Container {
                             text: ListItemData.Status == "1" ? "In Progress" : "Done"
                         }   
                     }
-                    
+            
                     gestureHandlers: [
                         
                         TapHandler {
@@ -95,7 +113,7 @@ Container {
                             onTapped: {
                                 taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
                                 taskCont.ListItem.view.pushNewPage();
-                            	    
+                            
                             }
                             
                             attachedObjects: ComponentDefinition {
@@ -107,6 +125,17 @@ Container {
                 }
             } // end of second ListItemComponent
         ]
+        
+        function itemType(data, indexPath) {
+            if(indexPath.length == 1){
+                return "header";
+            }
+            else {
+                return "listitem";
+            }	
+        
+        }
+        
         onCreationCompleted: {
             listView.dataModel = Model.get();
             apear.play();

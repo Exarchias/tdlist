@@ -20,6 +20,10 @@ public:
 	Q_INVOKABLE QString convertUTtoString(int unixTime);
 	Q_INVOKABLE void setclickedTaskId (int id);
 	Q_INVOKABLE int getclickedTaskId ();
+	Q_INVOKABLE void wait(int seconds);
+
+signals:
+	void waitPassed();
 
 private:
 	int clickedTaskId;

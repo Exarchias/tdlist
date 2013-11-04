@@ -11,6 +11,7 @@
 #include <cstring>
 #include <string>
 
+
 Helper::Helper() {
 
 }
@@ -29,5 +30,9 @@ void Helper::setclickedTaskId (int id) {
 int Helper::getclickedTaskId () {
 
 	return clickedTaskId;
+
+}
+
+void Helper::wait(int seconds){
 
 }

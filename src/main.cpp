@@ -3,6 +3,7 @@
 #include <QLocale>
 #include <QTranslator>
 #include "TDList.hpp"
+#include <QTimer>
 
 #include <Qt/qdeclarativedebug.h>
 
@@ -16,6 +17,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 
     qmlRegisterType<ListModel>("list", 1, 0, "lModel");
     qmlRegisterType<Helper>("cpphelper", 1, 0, "Cpphelper");
+    qmlRegisterType<QTimer>("bb.cascades", 1, 0, "QTimer");
     // Create the Application UI object, this is where the main.qml file
     // is loaded and the application scene is set.
     new TDList(&app);

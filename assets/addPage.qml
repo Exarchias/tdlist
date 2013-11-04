@@ -132,6 +132,32 @@ Page {
                 verticalAlignment: VerticalAlignment.Center
             }
             
+            Container {
+                layout: StackLayout {
+                    orientation: LayoutOrientation.LeftToRight
+                }
+                
+                CheckBox {
+                    verticalAlignment: VerticalAlignment.Center
+                    id: reminder
+                }
+                
+                Label {
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "Remind me "
+                }
+                
+                DateTimePicker {
+                    mode: DateTimePickerMode.Timer
+                    preferredWidth: 250
+                }
+                
+                Label {
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "before!"
+                }
+            }
+            
             Label {
                 text: "Description:"
                 textStyle.color: Color.create("#DEDEDE")
@@ -146,9 +172,7 @@ Page {
             TextArea {
                 id: description
                 inputMode: TextAreaInputMode.Text
-                preferredHeight: OrientationSupport.orientation == UIOrientation.Portrait ? 250 : 100
-                
-                
+                preferredHeight: OrientationSupport.orientation == UIOrientation.Portrait ? 250 : 50
             }	
         }
         

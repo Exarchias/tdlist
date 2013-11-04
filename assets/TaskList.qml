@@ -1,7 +1,6 @@
 import bb.cascades 1.0
 import list 1.0
 
-
 Container {
     id: listContainer    
     
@@ -39,6 +38,10 @@ Container {
         //Not the best way but I haven't found a better way to pass touched item to taskinfo page
         function passTouchedItem (taskId) {
             CppHelper.setclickedTaskId(taskId) 	   
+        }
+        
+        function checkStat (taskId, newStat) {
+            Model.changeStat(taskId, newStat);
         }
         
         dataModel: GroupDataModel {
@@ -95,10 +98,35 @@ Container {
                         id: checkbox
                         
                         
+                        property bool changedValue;
                         CheckBox {
+                            id: chkbox
+                            signal timeElapsed()
+                            
                             verticalAlignment: VerticalAlignment.Center
+                            checked: ListItemData.Status == "2" ? true: false
+                            
+                            onCheckedChanged: {
+                                checkbox.changedValue = chkbox.checked;
+                                clickedTimer.start();
+                            }
                         
                         }
+                                                
+                        attachedObjects: [
+                            
+                            QTimer {
+                                id: clickedTimer
+                                interval: 800
+                                
+                                onTimeout: {
+                                    if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);
+                                    else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);                                
+                                }
+                            }
+                        ]            
                     }
                     
                     Container {

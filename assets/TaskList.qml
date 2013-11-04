@@ -5,12 +5,30 @@ import list 1.0
 Container {
     id: listContainer    
     
-    
     ListView {
         
         property string touchedItem : ""
         
         id: listView
+        
+        function getHeight () {
+            if (Device.getDevice() == 1)
+                return 1280;
+            else if(Device.getDevice() == 2)
+                return 720;
+            else if(Device.getDevice() == 3)
+                return 1280; 	
+        }
+        
+        function getWidth() {
+            if (Device.getDevice() == 1)
+                return 768;
+            else if(Device.getDevice() == 2)
+                return 720;
+            else if(Device.getDevice() == 3)
+                return 720; 	
+        }
+        
         
         //Push new page
         function pushNewPage () {
@@ -38,22 +56,35 @@ Container {
                     id: headerCont
                     
                     Label {
+                        id: headerTitle
                         text: ListItemData == "1" ? "In Progress" : "Done"
                         textStyle.fontStyle: FontStyle.Italic
                         textStyle.fontSize: FontSize.Large
                         textStyle.fontWeight: FontWeight.Bold
                         
                         //Have to add exact width of a device
-                        preferredWidth: 1000
+                        preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? headerCont.ListItem.view.getHeight() : headerCont.ListItem.view.getWidth()
                     }
-                    background: Color.create("##4e4e4e")
+                    background: Color.create("#4e4e4e")
+                    
+                    
+                    attachedObjects: [
+                        OrientationHandler {
+                            onOrientationAboutToChange: {
+                                if (OrientationSupport.orientation == UIOrientation.Portrait)
+                                    headerTitle = headerCont.ListItem.view.getHeight();
+                                else 
+                                    headerTitle = headerCont.ListItem.view.getWidth();
+                            }
+                        }
+                    ] 
                 }
             },
             
             ListItemComponent {
                 type: "listitem"
                 id:listComponent
-        
+                
                 Container {
                     id: taskCont
                     
@@ -78,7 +109,7 @@ Container {
                     Container {
                         id: dateTime
                         
-                        preferredWidth: 700
+                        preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
                         
                         layout: DockLayout {
                         }
@@ -105,7 +136,7 @@ Container {
                             text: ListItemData.Status == "1" ? "In Progress" : "Done"
                         }   
                     }
-            
+                    
                     gestureHandlers: [
                         
                         TapHandler {
@@ -119,6 +150,18 @@ Container {
                             attachedObjects: ComponentDefinition {
                                 id: infoPage;
                                 source: "asset:///taskInfo.qml"                        
+                            }
+                        }
+                    ]
+                    
+                    attachedObjects: [
+                        OrientationHandler {
+                            id: handler
+                            onOrientationAboutToChange: {
+                                if (OrientationSupport.orientation == UIOrientation.Portrait)
+                                    dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
+                                else 
+                                    dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
                             }
                         }
                     ]    

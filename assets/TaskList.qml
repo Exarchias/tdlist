@@ -97,7 +97,7 @@ Container {
                         
                         CheckBox {
                             verticalAlignment: VerticalAlignment.Center
-                            
+                        
                         }
                     }
                     
@@ -179,11 +179,15 @@ Container {
                                     else 
                                         dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
                                 }
+                            
                             }
-                        ]    
+                        ]
+                    
+                    
                     }
-                }
-            } // end of second ListItemComponent
+                
+                } // end of second ListItemComponent
+            }
         ]
         
         function itemType(data, indexPath) {

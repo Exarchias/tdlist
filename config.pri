@@ -5,12 +5,14 @@ device {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
+                 $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
+                 $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }
@@ -18,12 +20,14 @@ device {
     CONFIG(release, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
+                 $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
+                 $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }
@@ -33,12 +37,14 @@ simulator {
     CONFIG(debug, debug|release) {
         SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
+                 $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
         HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
+                 $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }

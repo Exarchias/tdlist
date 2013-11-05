@@ -10,6 +10,7 @@
 #include <bb/cascades/GroupDataModel>
 #include <bb/data/JsonDataAccess>
 #include <vector>
+#include <set>
 
 enum taskStatus {Finished = 0, inProgress, withdrow};
 
@@ -20,7 +21,8 @@ Q_OBJECT
 public:
 	ListModel();
 
-	Q_INVOKABLE int addNewTask (QString description, QDateTime dateToFinish);
+	//IsReminded- 0 for false, 1 for true
+	Q_INVOKABLE int addNewTask (QString description, QDateTime dateToFinish, int isReminded);
 
 	//Remove one or multiple tasks at once
 	Q_INVOKABLE int removeTask (int dateCreated);
@@ -45,6 +47,8 @@ signals:
 private:
 	bb::data::JsonDataAccess* jda;
 
+private:
+	std::set<int> m_setOfDates;
 
 };
 

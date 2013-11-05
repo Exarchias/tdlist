@@ -96,14 +96,18 @@ Container {
                     
                     Container {
                         id: checkbox
-                        
-                        
+                        verticalAlignment: VerticalAlignment.Center
+                        preferredHeight: taskCont.preferredHeight
                         property bool changedValue;
+                        
+                        leftMargin: 10
+                        rightMargin: 10
+                        leftPadding: 10
+                        rightPadding: 10
+                        
                         CheckBox {
                             id: chkbox
                             signal timeElapsed()
-                            
-                            verticalAlignment: VerticalAlignment.Center
                             checked: ListItemData.Status == "2" ? true: false
                             
                             onCheckedChanged: {

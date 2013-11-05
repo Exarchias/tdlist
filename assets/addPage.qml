@@ -22,9 +22,9 @@ Page {
     }
     
     
-    function saveClicked (desc, datetime) {
+    function saveClicked (desc, datetime, ischecked) {
         
-        if (Model.addNewTask(desc, datetime) == 0) {
+        if (Model.addNewTask(desc, datetime, ischecked) == 0) {
             return 0;
         }
     
@@ -58,7 +58,12 @@ Page {
                     horizontalAlignment: HorizontalAlignment.Right
                     
                     onClicked: {
-                        if (saveClicked(description.text, finishDatePicker.value) == 0) {
+                        var chckboxvalue;
+                        if (reminder.checked == true)
+                        	chckboxvalue = 1;
+                        else 
+                        	chckboxvalue = 0;	
+                        if (saveClicked(description.text, finishDatePicker.value, chckboxvalue ) == 0) {
                             pop();                            
                         } else {
                             //Error message
@@ -94,9 +99,10 @@ Page {
             DateTimePicker {
                 preferredWidth: OrientationSupport.orientation == UIOrientation.Portrait ? getWidth() : getHeight()
                 id: finishDatePicker
-                title: "Date To Finish"
+                title: "Date To Remind"
                 maximum: "2038-01-19"
                 minimum: "1970-01-01"
+                value: {new Date();}
                 mode: DateTimePickerMode.Date
                 layoutProperties: StackLayoutProperties {
                 }
@@ -125,7 +131,8 @@ Page {
             DateTimePicker {
                 id: finishTimePicker
                 preferredWidth: OrientationSupport.orientation == UIOrientation.Portrait ? getWidth() : getHeight()
-                title: "Time To Finish"
+                title: "Time To Remind"
+                value: {new Date()}
                 mode: DateTimePickerMode.Time
                 layoutProperties: StackLayoutProperties {
                 }
@@ -145,16 +152,6 @@ Page {
                 Label {
                     verticalAlignment: VerticalAlignment.Center
                     text: "Remind me "
-                }
-                
-                DateTimePicker {
-                    mode: DateTimePickerMode.Timer
-                    preferredWidth: 250
-                }
-                
-                Label {
-                    verticalAlignment: VerticalAlignment.Center
-                    text: "before!"
                 }
             }
             

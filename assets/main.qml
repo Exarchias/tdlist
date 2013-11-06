@@ -7,7 +7,7 @@ NavigationPane {
     
     Page {
         id: mainpage
-
+        
         /*Title bar*/
         titleBar : TitleBar {
             title: "ToDo List"
@@ -21,10 +21,21 @@ NavigationPane {
             var page = testpage.createObject();
             navigationPane.push(page);	
         }
-        attachedObjects: ComponentDefinition {
-            id: testpage;
-            source: "asset:///taskInfo.qml"
+        function pushAddPage () {
+            var page = addPage.createObject();
+            navigationPane.push(page); 
         }
+        attachedObjects: [
+            ComponentDefinition {
+                id: testpage;
+                source: "asset:///taskInfo.qml"
+            },
+            
+            ComponentDefinition {
+                id:addPage
+                source: "asset:///addPage.qml"
+            }
+        ]
         
         
         /*Main content*/
@@ -45,13 +56,7 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.OnBar 
                 
                 onTriggered: {
-                    var page = addPage.createObject();
-                    navigationPane.push(page);  	
-                }
-                
-                attachedObjects: ComponentDefinition {
-                    id: addPage;
-                    source: "asset:///addPage.qml"
+ 	              	mainpage.pushAddPage();
                 }
             }
         ]

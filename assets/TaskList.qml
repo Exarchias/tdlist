@@ -4,6 +4,40 @@ import list 1.0
 Container {
     id: listContainer    
     
+    Container {
+        id: addItemCont
+
+        rightPadding: 10
+        layout: StackLayout {
+            orientation: LayoutOrientation.LeftToRight
+        }
+        
+        TextField {
+            id: descField
+            hintText: "Task Description"
+            verticalAlignment: VerticalAlignment.Center
+        }
+        
+        Button {
+            id: add
+            text: "Save"
+            
+            preferredWidth: 10
+            onClicked: {
+                if (descField.text.length == 0) {
+                    mainpage.pushAddPage();           
+                }
+                else {
+                    var datee = new Date();
+                    Model.addNewTask(descField.text, datee , 0);
+                    descField.text = "";
+                }
+            }
+        
+        }
+    
+    }
+    
     ListView {
         
         property string touchedItem : ""
@@ -94,7 +128,6 @@ Container {
                         orientation: LayoutOrientation.LeftToRight
                     }
                     
-                                        
                     Container {
                         id: taskInfoCont
                         
@@ -137,8 +170,8 @@ Container {
                                     fontStyle: FontStyle.Italic
                                 }
                             } 
-                            
-                            
+                        
+                        
                         }
                         
                         gestureHandlers: [

@@ -29,7 +29,7 @@ ListModel::ListModel()
 
 
 	this->insertList(list.value<QVariantList>());
-	this->setSortedAscending(true);
+	this->setSortedAscending(false);
 
 
 	QVariantList it = this->first();
@@ -96,7 +96,7 @@ int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isRem
 		m_setOfDates.insert(dateToFinish.toTime_t());
 	newTask["Remind"] = isReminded;
 	newTask["Description"] = description;
-	newTask["Status"] = QString::number(1);
+	newTask["Status"] = QString::number(2);
 	newTask["DateToFinish"] = dateToFinish.toTime_t();
 	newTask["DateCreated"] = QDateTime::currentDateTime().toTime_t();
 	//Insert before writing to Json

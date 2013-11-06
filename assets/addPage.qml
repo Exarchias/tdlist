@@ -144,14 +144,15 @@ Page {
                     orientation: LayoutOrientation.LeftToRight
                 }
                 
+                Label {
+                    verticalAlignment: VerticalAlignment.Center
+                    text: "Remind me:"
+                }
+                
                 CheckBox {
                     verticalAlignment: VerticalAlignment.Center
                     id: reminder
-                }
-                
-                Label {
-                    verticalAlignment: VerticalAlignment.Center
-                    text: "Remind me "
+                    
                 }
             }
             

@@ -12,7 +12,7 @@
 #include <vector>
 #include <set>
 
-enum taskStatus {Finished = 0, inProgress, withdrow};
+enum taskStatus {inProgress = 0, Finished, withdrow};
 
 class ListModel : public bb::cascades::GroupDataModel
 {

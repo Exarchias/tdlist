@@ -37,16 +37,16 @@ Page {
     actions: [
         
         ActionItem {
-            title: Model.getStatus(CppHelper.getclickedTaskId()) == 1 ? "Done" : "Undone"
+            title: Model.getStatus(CppHelper.getclickedTaskId()) == 2 ? "Done" : "Undone"
             
             ActionBar.placement: ActionBarPlacement.OnBar
             
             onTriggered: {
-                if (Model.getStatus(CppHelper.getclickedTaskId()) == 1) {
-                    if (Model.changeStat(CppHelper.getclickedTaskId(), 2) == 0)
+                if (Model.getStatus(CppHelper.getclickedTaskId()) == 2) {
+                    if (Model.changeStat(CppHelper.getclickedTaskId(), 1) == 0)
                         pop();
                 } else {
-                    if (Model.changeStat(CppHelper.getclickedTaskId(), 1) == 0)
+                    if (Model.changeStat(CppHelper.getclickedTaskId(), 2) == 0)
                         pop();
                 }
             }

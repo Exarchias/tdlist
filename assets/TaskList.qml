@@ -94,7 +94,7 @@ Container {
                     
                     Label {
                         id: headerTitle
-                        text: ListItemData == "1" ? "In Progress" : "Done"
+                        text: ListItemData == "2" ? "In Progress" : "Done"
                         textStyle.fontStyle: FontStyle.Italic
                         textStyle.fontSize: FontSize.Large
                         textStyle.fontWeight: FontWeight.Bold
@@ -219,7 +219,7 @@ Container {
                             signal timeElapsed()
                             
                             verticalAlignment: VerticalAlignment.Center
-                            checked: ListItemData.Status == "2" ? true: false
+                            checked: ListItemData.Status == "1" ? true: false
                             
                             onCheckedChanged: {
                                 checkbox.changedValue = chkbox.checked;
@@ -236,9 +236,9 @@ Container {
                                 
                                 onTimeout: {
                                     if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);
                                     else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);                                
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);                                
                                 }
                             }
                         ]            

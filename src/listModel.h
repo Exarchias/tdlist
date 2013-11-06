@@ -28,6 +28,10 @@ public:
 	Q_INVOKABLE int removeTask (int dateCreated);
 	Q_INVOKABLE int removeTask (std::vector<int> datesCreated);
 
+	Q_INVOKABLE bool isReminded (int taskID);
+
+	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
+
 	//Change statuses of one or multiple tasks' at once
 	Q_INVOKABLE int changeStat (int dateCreated, int taskStatus);
 

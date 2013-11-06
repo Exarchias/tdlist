@@ -204,5 +204,48 @@ int ListModel::changeStat (int dateCreated, int taskStatus) {
 	}
 
 	return 0;
+}
 
+bool ListModel::isReminded (int taskID) {
+	QVariantList it = this->first();
+	for (unsigned int i = 0; i < this->size(); i++) {
+		if (this->data(it).toMap()["DateCreated"].toInt() == taskID) {
+			if (this->data(it).toMap()["Remind"] == 0) {
+				return false;
+			}
+			else
+				return true;
+		}
+		it = this->after(it);
+	}
+}
+
+int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded) {
+
+	QVariantList entireDataList;
+	QVariantMap updatedData;
+	updatedData["Remind"] = (newisReminded == 0) ? false : true;
+	updatedData["Description"] = newDescription;
+	updatedData["DateToFinish"] = newDateToFinish.toTime_t();
+	QVariantList it = this->first();
+	for (unsigned int i = 0; i < this->size(); i++) {
+		if (this->data(it).toMap()["DateCreated"].toInt() == taskID) {
+			updatedData["DateCreated"] = this->data(it).toMap()["DateCreated"];
+			updatedData["Status"] = this->data(it).toMap()["Status"].toInt();
+			this->updateItem(it, updatedData);
+		}
+
+		entireDataList << this->data(it);
+		it = this->after(it);
+	}
+
+	QVariant entireData = (QVariant)entireDataList;
+
+	//Saving the Json file
+	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
+
+	if (!jda->hasError()) {
+	}
+
+	return 0;
 }

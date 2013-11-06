@@ -40,6 +40,9 @@ Page {
     Container {
         background: Color.create("#2E2E2E")
         
+        leftPadding: 10
+        rightPadding: 10
+        
         layout: StackLayout {
         
         }	

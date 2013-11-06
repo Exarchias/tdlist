@@ -78,6 +78,9 @@ Page {
         
         background: Color.create("#2E2E2E")
         
+        leftPadding: 10
+        rightPadding: 10
+        
         Container {
             id: dateContainer 
             layout: StackLayout {
@@ -87,8 +90,7 @@ Page {
             
             Label {
                 text: "Date:"
-                textStyle.color: Color.create("#DEDEDE")
-                textStyle.fontWeight: FontWeight.Bold
+                textStyle.color: Color.Gray
                 layoutProperties: StackLayoutProperties {
                 }
                 leftPadding: 2
@@ -120,8 +122,7 @@ Page {
             
             Label {
                 text: "Time:"
-                textStyle.color: Color.create("#DEDEDE")
-                textStyle.fontWeight: FontWeight.Bold
+                textStyle.color: Color.Gray
                 layoutProperties: StackLayoutProperties {
                 }
                 leftPadding: 2
@@ -147,6 +148,7 @@ Page {
                 Label {
                     verticalAlignment: VerticalAlignment.Center
                     text: "Remind me:"
+                    textStyle.color: Color.Gray
                 }
                 
                 CheckBox {
@@ -158,8 +160,7 @@ Page {
             
             Label {
                 text: "Description:"
-                textStyle.color: Color.create("#DEDEDE")
-                textStyle.fontWeight: FontWeight.Bold
+                textStyle.color: Color.Gray
                 layoutProperties: StackLayoutProperties {
                 }
                 leftPadding: 2

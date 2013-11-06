@@ -94,44 +94,11 @@ Container {
                         orientation: LayoutOrientation.LeftToRight
                     }
                     
-                    Container {
-                        id: checkbox
-                        
-                        
-                        property bool changedValue;
-                        CheckBox {
-                            id: chkbox
-                            signal timeElapsed()
-                            
-                            verticalAlignment: VerticalAlignment.Center
-                            checked: ListItemData.Status == "2" ? true: false
-                            
-                            onCheckedChanged: {
-                                checkbox.changedValue = chkbox.checked;
-                                clickedTimer.start();
-                            }
-                        
-                        }
-                                                
-                        attachedObjects: [
-                            
-                            QTimer {
-                                id: clickedTimer
-                                interval: 800
-                                
-                                onTimeout: {
-                                    if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);
-                                    else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);                                
-                                }
-                            }
-                        ]            
-                    }
-                    
+                                        
                     Container {
                         id: taskInfoCont
                         
+                        leftPadding: 10                        
                         layout: StackLayout {
                         }
                         
@@ -171,14 +138,7 @@ Container {
                                 }
                             } 
                             
-                            Label {
-                                id: statusLabel
-                                horizontalAlignment: HorizontalAlignment.Right
-                                verticalAlignment: VerticalAlignment.Center
-                                
-                                
-                                text: ListItemData.Status == "1" ? "In Progress" : "Done"
-                            }   
+                            
                         }
                         
                         gestureHandlers: [
@@ -212,6 +172,43 @@ Container {
                         ]
                     
                     
+                    }
+                    
+                    Container {
+                        id: checkbox
+                        
+                        verticalAlignment: VerticalAlignment.Center
+                        rightPadding: 10
+                        
+                        property bool changedValue;
+                        CheckBox {
+                            id: chkbox
+                            signal timeElapsed()
+                            
+                            verticalAlignment: VerticalAlignment.Center
+                            checked: ListItemData.Status == "2" ? true: false
+                            
+                            onCheckedChanged: {
+                                checkbox.changedValue = chkbox.checked;
+                                clickedTimer.start();
+                            }
+                        
+                        }
+                        
+                        attachedObjects: [
+                            
+                            QTimer {
+                                id: clickedTimer
+                                interval: 800
+                                
+                                onTimeout: {
+                                    if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);
+                                    else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
+                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);                                
+                                }
+                            }
+                        ]            
                     }
                 
                 } // end of second ListItemComponent

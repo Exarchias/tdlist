@@ -149,7 +149,11 @@ Page {
             ActionBar.placement: ActionBarPlacement.OnBar
             
             onTriggered: {
-                var a = (isReminded == true) ? 1: 0;
+                var a;
+                if (isReminded.checked == true)
+                	a = 1;
+                else
+                	a = 0;
                 if (Model.replaceEntry(CppHelper.getclickedTaskId(), descriptionField.text, finishDateTime.value, a) == 0) {
                     pop();
                 }

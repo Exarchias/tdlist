@@ -3,6 +3,8 @@ import list 1.0
 
 Container {
     
+    property alias lView: listView
+    
     id: mainContainer
     
     background: Color.create("#222E2E")
@@ -265,29 +267,6 @@ Container {
                 }	
             
             }
-            
-            attachedObjects: [
-                ContextModel {
-                    id: model
-                }
-            
-            ]
-            
-            onCreationCompleted: {
-                model.fillEntire();
-                listView.dataModel = model;
-                apear.play();
-            }
-            
-            animations: [
-                TranslateTransition {
-                    id: apear
-                    duration: 700
-                    
-                    //Max Y of a device
-                    fromY: 1024
-                }
-            ]
         }
     }
 }

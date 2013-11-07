@@ -37,16 +37,17 @@ public:
 	Q_INVOKABLE QString getDatetoFinish(int id);
 	Q_INVOKABLE int getStatus (int id);
 
+	Q_INVOKABLE void addNewFolder (QString name);
+
 	Q_INVOKABLE void fillByFolderName ();
 	Q_INVOKABLE void fillEntire();
+	Q_INVOKABLE void fillFolderList ();
 
 private slots:
 	void onNewTaskAdded(QVariantMap newTask);
 	void onTaskRemoved (int Id);
 	void onStatusChanged(int, int);
 	void onEntryReplaced (int, QVariantMap);
-
-
 
 private:
 	ListModel* m_mainModel;

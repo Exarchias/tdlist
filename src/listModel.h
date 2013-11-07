@@ -39,6 +39,10 @@ public:
 	QString getDatetoFinish(int id);
 	int getStatus (int id);
 
+	void addNewFolder (QString fName);
+	void deleteFolder (QString fName);
+	QVariantList getFolderList ();
+
 	ListModel* get();
 
 	static ListModel* Instance();
@@ -50,12 +54,15 @@ signals:
 	void statusChanged (int dateCreated, int newStatus);
 	void entryReplaced (int id, QVariantMap newEntry);
 
+	void folderAdded (QString);
+	void folderDeleted (QString);
+
 
 private:
 	bb::data::JsonDataAccess* jda;
 
 private:
-	std::set<int> m_setOfDates;
+	QVariantList m_folderList;
 
 private:
 	static ListModel* m_instance;

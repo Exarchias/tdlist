@@ -7,6 +7,7 @@
 
 #include "listModel.h"
 #include <QDebug>
+#include <QFile>
 
 #include "NotificationManager.h"
 
@@ -29,28 +30,20 @@ ListModel::ListModel()
 
 	this->setSortingKeys(keyList);
 
-	//this->sortingKeys() << "Status" << "DateCreated";
-
 	jda = new bb::data::JsonDataAccess;
+
+	QVariant folderList = jda->load(QDir::currentPath() +
+			"/app/native/assets/folders.json");
+
+	m_folderList = folderList.value<QVariantList>();
+
+	this->sortingKeys() << "Status" << "DateCreated";
+
 	QVariant list = jda->load(QDir::currentPath() +
 			"/app/native/assets/test.json");
 
 	this->insertList(list.value<QVariantList>());
 	this->setSortedAscending(false);
-
-
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["Remind"].toInt() == 1)
-			m_setOfDates.insert(this->data(it).toMap()["DateCreated"].toInt());
-
-		it = this->after(it);
-	}
-
-	//Create Pointer to set
-	std::set<int>* ptrToDateSet = &m_setOfDates;
-	NotificationManager* mainManager = new NotificationManager(ptrToDateSet, this->get());
-
 }
 
 
@@ -99,8 +92,6 @@ int ListModel::addNewTask(QString folder, QString description, QDateTime dateToF
 	//Creating the new task
 	QVariantMap newTask;
 	//newTask["taskId"] = QString::number(lastId+1);
-	if (isReminded == 1)
-		m_setOfDates.insert(dateToFinish.toTime_t());
 	newTask["Remind"] = isReminded;
 	newTask["Description"] = description;
 	newTask["Status"] = QString::number(2);
@@ -255,8 +246,30 @@ int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDa
 	if (!jda->hasError()) {
 		emit entryReplaced(taskID, updatedData);
 	}
-
-
-
 	return 0;
+}
+
+void ListModel::addNewFolder (QString fName) {
+	m_folderList.append(fName);
+	jda->save((QVariant)m_folderList, QDir::currentPath() +
+			"/app/native/assets/folders.json");
+	emit folderAdded (fName);
+}
+
+void ListModel::deleteFolder(QString fName) {
+	QVariantList::iterator it = m_folderList.begin();
+	for (int i = 0; i < m_folderList.size(); i++) {
+		if (*it == fName){
+			m_folderList.erase(it);
+			break;
+		}
+		it++;
+	}
+	jda->save((QVariant)m_folderList, QDir::currentPath() +
+			"/app/native/assets/folders.json");
+	emit folderDeleted (fName);
+}
+
+QVariantList ListModel::getFolderList () {
+	return m_folderList;
 }

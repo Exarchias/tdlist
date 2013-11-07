@@ -45,8 +45,29 @@ NavigationPane {
             //background: Color.create("#2E2E2E")
             
             TaskList {
+                id: tList
             }
-        
+            attachedObjects: [
+                ContextModel {
+                    id: model
+                }
+            ]
+            
+            onCreationCompleted: {
+                model.fillEntire();
+                tList.lView.dataModel = model;
+                apear.play();
+            }
+            
+            animations: [
+                TranslateTransition {
+                    id: apear
+                    duration: 700
+                    
+                    //Max Y of a device
+                    fromY: 1024
+                }
+            ]
         }
         
         actions: [
@@ -56,7 +77,7 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.OnBar 
                 
                 onTriggered: {
- 	              	mainpage.pushAddPage();
+                    mainpage.pushAddPage();
                 }
             }
         ]

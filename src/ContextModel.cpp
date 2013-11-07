@@ -129,3 +129,11 @@ void ContextModel::onEntryReplaced (int id, QVariantMap newEntry) {
 		it = this->after(it);
 	}
 }
+
+void ContextModel::fillFolderList () {
+	this->insertList(m_mainModel->getFolderList());
+}
+
+void ContextModel::addNewFolder (QString name) {
+	m_mainModel->addNewFolder(name);
+}

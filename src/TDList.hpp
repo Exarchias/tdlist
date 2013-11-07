@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "listModel.h"
+#include "ContextModel.h"
 
 namespace bb
 {
@@ -28,7 +28,7 @@ private slots:
 private:
 
 private:
-	ListModel* mainModel;
+	ContextModel* mainModel;
 };
 
 #endif /* ApplicationUI_HPP_ */

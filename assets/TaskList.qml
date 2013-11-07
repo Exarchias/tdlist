@@ -83,7 +83,7 @@ Container {
             }
             
             function checkStat (taskId, newStat) {
-                Model.changeStat(taskId, newStat);
+                model.changeStat(taskId, newStat);
             }
             
             dataModel: GroupDataModel {
@@ -266,8 +266,16 @@ Container {
             
             }
             
+            attachedObjects: [
+                ContextModel {
+                    id: model
+                }
+            
+            ]
+            
             onCreationCompleted: {
-                listView.dataModel = Model.get();
+                model.fillEntire();
+                listView.dataModel = model;
                 apear.play();
             }
             

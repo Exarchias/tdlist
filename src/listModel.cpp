@@ -12,6 +12,14 @@
 
 using namespace bb::cascades;
 
+ListModel* ListModel::m_instance = NULL;
+
+ListModel* ListModel::Instance() {
+	if (!m_instance)
+		m_instance = new ListModel;
+
+	return m_instance;
+}
 
 ListModel::ListModel()
 {
@@ -26,7 +34,6 @@ ListModel::ListModel()
 	jda = new bb::data::JsonDataAccess;
 	QVariant list = jda->load(QDir::currentPath() +
 			"/app/native/assets/test.json");
-
 
 	this->insertList(list.value<QVariantList>());
 	this->setSortedAscending(false);
@@ -81,7 +88,7 @@ int ListModel::getStatus (int id) {
 	return this->data(this->last()).toMap()["Status"].toInt();
 }
 
-int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isReminded) {
+int ListModel::addNewTask(QString folder, QString description, QDateTime dateToFinish, int isReminded) {
 	/*	I don't use ID any more, as DateCreated is unique for every task
 	//Getting the the ID of last task
 	QVariantList lastItemPath = this->first();
@@ -99,6 +106,7 @@ int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isRem
 	newTask["Status"] = QString::number(2);
 	newTask["DateToFinish"] = dateToFinish.toTime_t();
 	newTask["DateCreated"] = QDateTime::currentDateTime().toTime_t();
+	newTask["Folder"] = folder;
 	//Insert before writing to Json
 	//To be able to write Json file
 	this->insert(newTask);
@@ -114,7 +122,7 @@ int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isRem
 	//Save Json file
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
 	if (!jda->hasError()) {
-		emit newTaskAdded();
+		emit newTaskAdded(newTask);
 	}else {
 		//Remove the problematic task from model if there is a problem in writing to json
 		this->remove(newTask);
@@ -245,7 +253,10 @@ int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDa
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
 
 	if (!jda->hasError()) {
+		emit entryReplaced(taskID, updatedData);
 	}
+
+
 
 	return 0;
 }

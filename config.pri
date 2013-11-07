@@ -3,14 +3,16 @@ BASEDIR =  $$quote($$_PRO_FILE_PWD_)
 
 device {
     CONFIG(debug, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+                 $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+                 $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
@@ -18,14 +20,16 @@ device {
     }
 
     CONFIG(release, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+                 $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+                 $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
@@ -35,14 +39,16 @@ device {
 
 simulator {
     CONFIG(debug, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+                 $$quote($$BASEDIR/src/DeviceSettings.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/DeviceSettings.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+                 $$quote($$BASEDIR/src/DeviceSettings.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \

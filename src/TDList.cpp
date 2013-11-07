@@ -18,7 +18,7 @@ TDList::TDList(bb::cascades::Application *app) :
     // to ensure the document gets destroyed properly at shut down.
     QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
 
-    mainModel = new ListModel();
+    mainModel = new ContextModel();
     Helper* Help = new Helper();
     DeviceSettings* device = new DeviceSettings();
 

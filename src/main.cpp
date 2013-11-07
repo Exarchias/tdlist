@@ -7,7 +7,7 @@
 
 #include <Qt/qdeclarativedebug.h>
 
-#include "listModel.h"
+#include "ContextModel.h"
 #include "Helper.h"
 using namespace bb::cascades;
 
@@ -15,7 +15,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 {
     Application app(argc, argv);
 
-    qmlRegisterType<ListModel>("list", 1, 0, "lModel");
+    qmlRegisterType<ContextModel>("list", 1, 0, "ContextModel");
     qmlRegisterType<Helper>("cpphelper", 1, 0, "Cpphelper");
     qmlRegisterType<QTimer>("bb.cascades", 1, 0, "QTimer");
     // Create the Application UI object, this is where the main.qml file

@@ -54,7 +54,7 @@ signals:
 	void statusChanged (int dateCreated, int newStatus);
 	void entryReplaced (int id, QVariantMap newEntry);
 
-	void folderAdded (QString);
+	void folderAdded (QVariantMap);
 	void folderDeleted (QString);
 
 

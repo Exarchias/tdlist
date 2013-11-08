@@ -44,6 +44,7 @@ ListModel::ListModel()
 
 	this->insertList(list.value<QVariantList>());
 	this->setSortedAscending(false);
+
 }
 
 
@@ -250,10 +251,13 @@ int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDa
 }
 
 void ListModel::addNewFolder (QString fName) {
-	m_folderList.append(fName);
+	QVariantMap newItem;
+	newItem["FolderName"] = fName;
+	newItem["Id"] = QDateTime::currentDateTime().toTime_t();
+	m_folderList << newItem;
 	jda->save((QVariant)m_folderList, QDir::currentPath() +
 			"/app/native/assets/folders.json");
-	emit folderAdded (fName);
+	emit folderAdded (newItem);
 }
 
 void ListModel::deleteFolder(QString fName) {

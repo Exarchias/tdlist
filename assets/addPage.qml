@@ -24,7 +24,7 @@ Page {
     
     function saveClicked (desc, datetime, ischecked) {
         
-        if (Model.addNewTask(desc, datetime, ischecked) == 0) {
+        if (Model.addNewTask(CppHelper.getClickedFolderName(), desc, datetime, ischecked) == 0) {
             return 0;
         }
     

@@ -11,21 +11,32 @@
 ContextModel::ContextModel() {
 	// TODO Auto-generated constructor stub
 	m_mainModel = ListModel::Instance();
+	this->setSortedAscending(false);
 
 	QStringList keyList;
-	keyList << "Status" << "DateCreated";
+	//keyList << "Status" << "DateCreated";
 
-	this->setSortingKeys(keyList);
-	this->setSortedAscending(false);
+	//this->setSortingKeys(keyList);
 
 	connect (m_mainModel, SIGNAL(newTaskAdded(QVariantMap)), this, SLOT(onNewTaskAdded(QVariantMap)));
 	connect (m_mainModel, SIGNAL(taskRemoved(int)), this, SLOT(onTaskRemoved(int)));
 	connect (m_mainModel, SIGNAL(statusChanged(int,int)), this, SLOT(onStatusChanged(int,int)));
 	connect (m_mainModel, SIGNAL(entryReplaced(int,QVariantMap)), this, SLOT(onEntryReplaced(int, QVariantMap)));
+	connect (m_mainModel, SIGNAL(folderAdded(QVariantMap)), this, SLOT (onNewFolderAdded(QVariantMap)));
 }
 
 ContextModel::~ContextModel() {
 	// TODO Auto-generated destructor stub
+}
+
+QString ContextModel::getFolderName (int id) {
+	QVariantList it = this->first();
+	for (unsigned int i = 0; i < this->size(); i++) {
+		if (this->data(it).toMap()["Id"].toInt() == id) {
+			return this->data(it).toMap()["FolderName"].toString();
+		}
+		it = this->after(it);
+	}
 }
 
 QString ContextModel::folder() {
@@ -45,20 +56,31 @@ void ContextModel::fillEntire () {
 }
 
 void ContextModel::fillByFolderName () {
+	m_dataMode = 1;
+
+
+	QStringList keyList;
+	keyList << "Status" << "DateCreated";
+
+	this->setSortingKeys(keyList);
+	this->clear();
 	QVariantList it = m_mainModel->first();
 	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
-		if (m_mainModel->data(it).toMap()["Folder"] == m_folderName) {
+		if (m_mainModel->data(it).toMap()["Folder"].toString() == m_folderName) {
 			this->insert(m_mainModel->data(it).toMap());
 		}
 
 		it = m_mainModel->after(it);
 	}
+
+	//A bug in BB SDK. Have to put following after insert(...)
+	this->setSortedAscending(false);
 }
 
 
-int ContextModel::addNewTask (QString description, QDateTime dateToFinish, int isReminded) {
+int ContextModel::addNewTask ( QString folderName, QString description, QDateTime dateToFinish, int isReminded) {
 
-	return m_mainModel->addNewTask(m_folderName, description, dateToFinish, isReminded);
+	return m_mainModel->addNewTask(folderName, description, dateToFinish, isReminded);
 
 }
 
@@ -91,7 +113,8 @@ int ContextModel::getStatus (int id) {
 }
 
 void ContextModel::onNewTaskAdded (QVariantMap newtask) {
-	this->insert(newtask);
+	if (m_dataMode == 1 && m_folderName == newtask["Folder"].toString())
+		this->insert(newtask);
 }
 
 void ContextModel::onTaskRemoved (int id) {
@@ -130,8 +153,19 @@ void ContextModel::onEntryReplaced (int id, QVariantMap newEntry) {
 	}
 }
 
+void ContextModel::onNewFolderAdded(QVariantMap newFolder) {
+
+	if (m_dataMode == 0)
+		this->insert(newFolder);
+
+}
+
 void ContextModel::fillFolderList () {
+	m_dataMode = 0;
+
 	this->insertList(m_mainModel->getFolderList());
+	//Sort in Ascending order when folders are data
+	this->setSortedAscending(true);
 }
 
 void ContextModel::addNewFolder (QString name) {

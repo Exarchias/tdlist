@@ -1,6 +1,7 @@
 import bb.cascades 1.0
 import list 1.0
 
+
 Container {
     
     property alias lView: listView
@@ -9,12 +10,15 @@ Container {
     
     background: Color.create("#222E2E")
     
+    
+    
     Container {
         id: listContainer    
-        
+                        
         Container {
             id: addItemCont
-            
+            bottomMargin: 10
+                
             background: Color.create("#1D2B2B")
             
             rightPadding: 10
@@ -35,11 +39,11 @@ Container {
                 preferredWidth: 10
                 onClicked: {
                     if (descField.text.length == 0) {
-                        mainpage.pushAddPage();           
+                        insideFolderPage.pushAddPage();           
                     }
                     else {
                         var datee = new Date();
-                        Model.addNewTask(descField.text, datee , 0);
+                        Model.addNewTask(CppHelper.getClickedFolderName(), descField.text, datee , 0);
                         descField.text = "";
                     }
                 }
@@ -47,6 +51,16 @@ Container {
             }
         
         }
+        
+        contextActions: [
+            ActionSet {
+                title: "Modify"
+                ActionItem {
+                    id: deleteAction
+                    title: "Delete"
+                }
+            }
+        ]
         
         ListView {
             
@@ -72,10 +86,15 @@ Container {
                     return 720; 	
             }
             
+            function addActionOnPressed () {
+                insideFolderPage.addAction(deleteAction, ActionBarPlacement.InOverflow);
+            }
+            
+            
             
             //Push new page
             function pushNewPage () {
-                mainpage.pushInfoPage()            
+                insideFolderPage.pushInfoPage()            
             }
             
             //Passes touched Item Id to c++ helper function
@@ -183,16 +202,25 @@ Container {
                             
                             
                             }
-                            
+                                                                                    
                             gestureHandlers: [
+                                
+                                LongPressHandler {
+                                    onLongPressed: {
+                                        taskCont.ListItem.view.addActionOnPressed ();
+                                    }
+                                },
                                 
                                 TapHandler {
                                     
+                                                                        
                                     onTapped: {
                                         taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
                                         taskCont.ListItem.view.pushNewPage();
                                     
                                     }
+                            
+                            		
                                     
                                     attachedObjects: ComponentDefinition {
                                         id: infoPage;
@@ -269,4 +297,7 @@ Container {
             }
         }
     }
+
 }
+
+

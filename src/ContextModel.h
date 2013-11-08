@@ -26,16 +26,16 @@ public:
 	QString folder();
 	void setFolder(QString FolderName);
 
-	Q_INVOKABLE int addNewTask (QString description, QDateTime dateToFinish, int isReminded);
+	Q_INVOKABLE int addNewTask (QString folderName, QString description, QDateTime dateToFinish, int isReminded);
 	Q_INVOKABLE int removeTask (int dateCreated);
 	Q_INVOKABLE bool isReminded (int taskID);
 	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
 	Q_INVOKABLE int changeStat (int dateCreated, int taskStatus);
 
-
 	Q_INVOKABLE QString getDesctiption(int id);
 	Q_INVOKABLE QString getDatetoFinish(int id);
 	Q_INVOKABLE int getStatus (int id);
+	Q_INVOKABLE QString getFolderName (int id);
 
 	Q_INVOKABLE void addNewFolder (QString name);
 
@@ -48,12 +48,16 @@ private slots:
 	void onTaskRemoved (int Id);
 	void onStatusChanged(int, int);
 	void onEntryReplaced (int, QVariantMap);
+	void onNewFolderAdded (QVariantMap);
 
 private:
 	ListModel* m_mainModel;
 	QString m_folderName;
 
 private:
+	//Whether it is displaying folders or actual data. 0 for folders, 1 for entries
+	int m_dataMode;
+
 
 
 };

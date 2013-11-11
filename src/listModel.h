@@ -22,7 +22,7 @@ public:
 	ListModel();
 
 	//IsReminded- 0 for false, 1 for true
-	int addNewTask (QString folder, QString description, QDateTime dateToFinish, int isReminded);
+	int addNewTask (int folder, QString description, QDateTime dateToFinish, int isReminded);
 
 	//Remove one or multiple tasks at once
 	int removeTask (int dateCreated);

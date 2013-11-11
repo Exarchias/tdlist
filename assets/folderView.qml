@@ -40,6 +40,10 @@ Page {
         id: main_content
         
         //background: Color.create("#2E2E2E")
+        
+        TaskList {
+            id: tList
+        }
         attachedObjects: [
             ContextModel {
                 id: model
@@ -47,13 +51,9 @@ Page {
             }
         ]
         
-        TaskList {
-            id: tList
-        }
-
-        
         onCreationCompleted: {
-            model.fillByFolderName();
+            testLabel.text = model.folder
+            model.fillByFolderId(CppHelper.getClickedFolderName());
             tList.lView.dataModel = model;
         }
         

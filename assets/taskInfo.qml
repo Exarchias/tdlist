@@ -38,7 +38,7 @@ Page {
     }
     
     Container {
-        background: Color.create("#2E2E2E")
+        background: Color.create("#222E2E")
         
         leftPadding: 10
         rightPadding: 10
@@ -78,11 +78,12 @@ Page {
                 mode: DateTimePickerMode.DateTime
                 title: "Remind date"
                 value: {new Date(getDatetoFinish(CppHelper.getclickedTaskId())*1000); }
-                
+                enabled: isReminded.checked == true ? true : false
                 preferredWidth: OrientationSupport.orientation == UIOrientation.Portrait ? taskInfo.getWidth() : taskInfo.getHeight()
                 
                 onValueChanged: {
-                    saveItem.enabled = true;                }
+                    saveItem.enabled = true;               
+                }
             }	
         }
         Label {

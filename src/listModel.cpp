@@ -7,11 +7,20 @@
 
 #include "listModel.h"
 #include <QDebug>
+#include <QFile>
 
 #include "NotificationManager.h"
 
 using namespace bb::cascades;
 
+ListModel* ListModel::m_instance = NULL;
+
+ListModel* ListModel::Instance() {
+	if (!m_instance)
+		m_instance = new ListModel;
+
+	return m_instance;
+}
 
 ListModel::ListModel()
 {
@@ -19,105 +28,76 @@ ListModel::ListModel()
 	QStringList keyList;
 	keyList << "Status" << "DateCreated";
 
-	this->setSortingKeys(keyList);
-
-	//this->sortingKeys() << "Status" << "DateCreated";
-
 	jda = new bb::data::JsonDataAccess;
+
+	QVariant folderList = jda->load(QDir::currentPath() +
+			"/app/native/assets/folders.json");
+
+	m_folderList = folderList.value<QVariantList>();
+
 	QVariant list = jda->load(QDir::currentPath() +
 			"/app/native/assets/test.json");
 
-
-	this->insertList(list.value<QVariantList>());
-	this->setSortedAscending(false);
-
-
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["Remind"].toInt() == 1)
-			m_setOfDates.insert(this->data(it).toMap()["DateCreated"].toInt());
-
-		it = this->after(it);
-	}
-
-	//Create Pointer to set
-	std::set<int>* ptrToDateSet = &m_setOfDates;
-	NotificationManager* mainManager = new NotificationManager(ptrToDateSet, this->get());
-
+	m_fullDataList = list.value<QVariantList>();
 }
-
-
-ListModel* ListModel::get() {
-
-	return this;
-
+QVariantList ListModel::getData() const {
+	return m_fullDataList;
 }
 
 QString ListModel::getDesctiption (int id) {
-	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == id)
-			return this->data(it).toMap()["Description"].toString();
+
+	for (int i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == id) {
+			return m_fullDataList.at(i).toMap()["Description"].toString();
+		}
 	}
-	//Loop does not check the last item, so if it ends, the last element is what we are looking for
-	return this->data(this->last()).toMap()["Description"].toString();
+
 }
 
 QString ListModel::getDatetoFinish(int id) {
-	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == id)
-			return this->data(it).toMap()["DateToFinish"].toString();
+
+	for (int i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == id) {
+			return m_fullDataList.at(i).toMap()["DateToFinish"].toString();
+		}
 	}
-	//Loop does not check the last item, so if it ends, the last element is what we are looking for
-	return this->data(this->last()).toMap()["DateToFinish"].toString();
 }
 
 int ListModel::getStatus (int id) {
 
-	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == id)
-			return this->data(it).toMap()["Status"].toInt();
+	for (int i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == id) {
+			return m_fullDataList.at(i).toMap()["Status"].toInt();
+		}
 	}
-	//Loop does not check the last item, so if it ends, the last element is what we are looking for
-	return this->data(this->last()).toMap()["Status"].toInt();
+
 }
 
-int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isReminded) {
-	/*	I don't use ID any more, as DateCreated is unique for every task
-	//Getting the the ID of last task
-	QVariantList lastItemPath = this->first();
-	QVariant last = this->data(lastItemPath);
-	QVariantMap map = last.toMap();
-	int lastId = map["taskId"].toInt();
-	 */
+int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinish, int isReminded) {
 	//Creating the new task
 	QVariantMap newTask;
 	//newTask["taskId"] = QString::number(lastId+1);
-	if (isReminded == 1)
-		m_setOfDates.insert(dateToFinish.toTime_t());
 	newTask["Remind"] = isReminded;
 	newTask["Description"] = description;
-	newTask["Status"] = QString::number(2);
+	newTask["Status"] = 2;
 	newTask["DateToFinish"] = dateToFinish.toTime_t();
 	newTask["DateCreated"] = QDateTime::currentDateTime().toTime_t();
+	newTask["Folder"] = folder;
 	//Insert before writing to Json
 	//To be able to write Json file
-	this->insert(newTask);
 
-	//Gluing all tasks together
-	QVariantList entireDataList;
-	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
-		entireDataList << this->data(it);
-	}
-	entireDataList << this->data(this->last());
-	QVariant entireData = (QVariant)entireDataList;
+
+	//this->insert(newTask);
+
+	m_fullDataList << newTask;
+
+	QVariant entireData = (QVariant)m_fullDataList;
 
 	//Save Json file
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
 	if (!jda->hasError()) {
-		emit newTaskAdded();
+		emit newTaskAdded(newTask);
 	}else {
-		//Remove the problematic task from model if there is a problem in writing to json
-		this->remove(newTask);
 	}
 
 	return 0;
@@ -126,20 +106,13 @@ int ListModel::addNewTask(QString description, QDateTime dateToFinish, int isRem
 
 int ListModel::removeTask (int dateCreated) {
 	//Finding and removing from the Model
-	QVariantList entireDataList;
-
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == dateCreated) {
-			this->removeAt(it);
-		} else {
-			entireDataList << this->data(it);
+	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == dateCreated) {
+			m_fullDataList.removeAt(i);
 		}
-
-		it = this->after(it);
 	}
 
-	QVariant entireData = (QVariant)entireDataList;
+	QVariant entireData = (QVariant)m_fullDataList;
 
 	//Saving the Json file
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
@@ -153,48 +126,44 @@ int ListModel::removeTask (int dateCreated) {
 
 int ListModel::removeTask (std::vector<int> datesCreated) {
 
-	//TODO Fix removeTask(std::vector...) function. THIS STILL DOES NOT WORK
-	//Finding and removing from the Model
-	QVariantList entireDataList;
-	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
-		for (unsigned int i = 0; i < datesCreated.size(); i++) {
-			if (this->data(it).toMap()["DateCreated"].toInt() == datesCreated[i]) {
-				this->removeAt(it);
-			}
-		}
-
-		entireDataList << this->data(it);
-	}
-	QVariant entireData = (QVariant)entireDataList;
-
-	//Saving the Json file
-	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
-	if (!jda->hasError()) {
-
-		emit tasksRemoved(datesCreated);
-
-	}
+	//TODO removeTask (std:;vector) implementation
+	//	//Finding and removing from the Model
+	//	QVariantList entireDataList;
+	//	for (QVariantList it = this->first(); it != this->last(); it = this->after(it)) {
+	//		for (unsigned int i = 0; i < datesCreated.size(); i++) {
+	//			if (this->data(it).toMap()["DateCreated"].toInt() == datesCreated[i]) {
+	//				this->removeAt(it);
+	//			}
+	//		}
+	//
+	//		entireDataList << this->data(it);
+	//	}
+	//	QVariant entireData = (QVariant)entireDataList;
+	//
+	//	//Saving the Json file
+	//	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
+	//	if (!jda->hasError()) {
+	//
+	//		emit tasksRemoved(datesCreated);
+	//
+	//	}
 
 	return 0;
 }
 
 int ListModel::changeStat (int dateCreated, int taskStatus) {
-
-	QVariantList entireDataList;
 	QVariantMap updatedData;
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["DateCreated"].toString() == QString::number(dateCreated)) {
-			updatedData = this->data(it).toMap();
-			updatedData["Status"] = QString::number(taskStatus);
-			this->updateItem(it, updatedData);
+	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == dateCreated) {
+			updatedData = m_fullDataList.at(i).toMap();
+			updatedData["Status"] = taskStatus;
+			QVariant variantfromMap(updatedData);
+			m_fullDataList.replace(i, variantfromMap);
 		}
-
-		entireDataList << this->data(it);
-		it = this->after(it);
 	}
 
-	QVariant entireData = (QVariant)entireDataList;
+
+	QVariant entireData = (QVariant)m_fullDataList;
 
 	//Saving the Json file
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
@@ -207,45 +176,67 @@ int ListModel::changeStat (int dateCreated, int taskStatus) {
 }
 
 bool ListModel::isReminded (int taskID) {
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == taskID) {
-			if (this->data(it).toMap()["Remind"] == 0) {
-				return false;
-			}
-			else
-				return true;
-		}
-		it = this->after(it);
+
+	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["Remind"] == 0)
+			return true;
+		else
+			return false;
 	}
+
 }
 
 int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded) {
 
-	QVariantList entireDataList;
 	QVariantMap updatedData;
 	updatedData["Remind"] = (newisReminded == 0) ? false : true;
 	updatedData["Description"] = newDescription;
 	updatedData["DateToFinish"] = newDateToFinish.toTime_t();
-	QVariantList it = this->first();
-	for (unsigned int i = 0; i < this->size(); i++) {
-		if (this->data(it).toMap()["DateCreated"].toInt() == taskID) {
-			updatedData["DateCreated"] = this->data(it).toMap()["DateCreated"];
-			updatedData["Status"] = this->data(it).toMap()["Status"].toInt();
-			this->updateItem(it, updatedData);
-		}
 
-		entireDataList << this->data(it);
-		it = this->after(it);
+	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
+		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == taskID) {
+			updatedData["DateCreated"] = m_fullDataList.at(i).toMap()["DateCreated"];
+			updatedData["Status"] = m_fullDataList.at(i).toMap()["Status"].toInt();
+			QVariant dataFromMap(updatedData);
+			m_fullDataList.replace(i, dataFromMap);
+		}
 	}
 
-	QVariant entireData = (QVariant)entireDataList;
+	QVariant entireData = (QVariant)m_fullDataList;
 
 	//Saving the Json file
 	jda->save(entireData, QDir::currentPath() + "/app/native/assets/test.json");
 
 	if (!jda->hasError()) {
+		emit entryReplaced(taskID, updatedData);
 	}
-
 	return 0;
+}
+
+void ListModel::addNewFolder (QString fName) {
+	QVariantMap newItem;
+	newItem["FolderName"] = fName;
+	newItem["Id"] = QDateTime::currentDateTime().toTime_t();
+	m_folderList << newItem;
+	jda->save((QVariant)m_folderList, QDir::currentPath() +
+			"/app/native/assets/folders.json");
+	emit folderAdded (newItem);
+}
+
+void ListModel::deleteFolder(QString fName) {
+	QVariantList::iterator it = m_folderList.begin();
+	for (int i = 0; i < m_folderList.size(); i++) {
+		if (*it == fName){
+			m_folderList.erase(it);
+			break;
+		}
+		it++;
+	}
+	jda->save((QVariant)m_folderList, QDir::currentPath() +
+			"/app/native/assets/folders.json");
+	emit folderDeleted (fName);
+}
+
+QVariantList ListModel::getFolderList () {
+	return m_folderList;
 }

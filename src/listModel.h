@@ -14,7 +14,7 @@
 
 enum taskStatus {inProgress = 0, Finished, withdrow};
 
-class ListModel : public bb::cascades::GroupDataModel
+class ListModel : public QObject
 {
 
 Q_OBJECT
@@ -22,37 +22,51 @@ public:
 	ListModel();
 
 	//IsReminded- 0 for false, 1 for true
-	Q_INVOKABLE int addNewTask (QString description, QDateTime dateToFinish, int isReminded);
+	int addNewTask (int folder, QString description, QDateTime dateToFinish, int isReminded);
 
 	//Remove one or multiple tasks at once
-	Q_INVOKABLE int removeTask (int dateCreated);
-	Q_INVOKABLE int removeTask (std::vector<int> datesCreated);
+	int removeTask (int dateCreated);
+	int removeTask (std::vector<int> datesCreated);
 
-	Q_INVOKABLE bool isReminded (int taskID);
+	bool isReminded (int taskID);
 
-	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
+	int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
 
 	//Change statuses of one or multiple tasks' at once
-	Q_INVOKABLE int changeStat (int dateCreated, int taskStatus);
+	int changeStat (int dateCreated, int taskStatus);
 
-	Q_INVOKABLE QString getDesctiption(int id);
-	Q_INVOKABLE QString getDatetoFinish(int id);
-	Q_INVOKABLE int getStatus (int id);
+	QString getDesctiption(int id);
+	QString getDatetoFinish(int id);
+	int getStatus (int id);
 
-	Q_INVOKABLE ListModel* get();
+	void addNewFolder (QString fName);
+	void deleteFolder (QString fName);
+	QVariantList getFolderList ();
+
+	QVariantList getData() const;
+
+	static ListModel* Instance();
 
 signals:
-	void newTaskAdded ();
+	void newTaskAdded (QVariantMap);
 	void taskRemoved(int dateCreated);
 	void tasksRemoved(std::vector<int> datesCreated);
 	void statusChanged (int dateCreated, int newStatus);
+	void entryReplaced (int id, QVariantMap newEntry);
+
+	void folderAdded (QVariantMap);
+	void folderDeleted (QString);
 
 
 private:
 	bb::data::JsonDataAccess* jda;
 
 private:
-	std::set<int> m_setOfDates;
+	QVariantList m_folderList;
+	QVariantList m_fullDataList;
+
+private:
+	static ListModel* m_instance;
 
 };
 

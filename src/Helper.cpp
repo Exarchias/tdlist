@@ -27,12 +27,16 @@ void Helper::setclickedTaskId (int id) {
 
 }
 
-int Helper::getclickedTaskId () {
+int Helper::getclickedTaskId () const {
 
 	return clickedTaskId;
 
 }
 
-void Helper::wait(int seconds){
+int Helper::getClickedFolderName () const{
+	return m_clickedFolderName;
+}
 
+void Helper::setClickedFolderName (int newfolderName) {
+	m_clickedFolderName = newfolderName;
 }

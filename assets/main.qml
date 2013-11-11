@@ -6,60 +6,124 @@ NavigationPane {
     id: navigationPane
     
     Page {
-        id: mainpage
+        id: folderPage
         
-        /*Title bar*/
-        titleBar : TitleBar {
-            title: "ToDo List"
+        titleBar: TitleBar {
+            id: ttlbar
+            
+            title: "Folder List"
         }
         
-        //I have to push "taskInfo.qml" from main, s
-        //I can use contextProperties in it.
-        //Somewhy, when I push it from "taskList", 
-        //I am unable to use contextProperties
-        function pushInfoPage() {
+        function setClickedFolder (folderName) {
+            CppHelper.setClickedFolderName(folderName);
+        }
+        
+        function pushFolderViewPage () {
             var page = testpage.createObject();
-            navigationPane.push(page);	
+            navigationPane.push(page);
         }
-        function pushAddPage () {
-            var page = addPage.createObject();
-            navigationPane.push(page); 
+        
+        function getFolderName (id) {
+            return model.getFolderName (id);
         }
+        
         attachedObjects: [
             ComponentDefinition {
                 id: testpage;
-                source: "asset:///taskInfo.qml"
-            },
-            
-            ComponentDefinition {
-                id:addPage
-                source: "asset:///addPage.qml"
+                source: "asset:///folderView.qml"
             }
         ]
         
         
-        /*Main content*/
-        Container {
-            id: main_content
-            
-            //background: Color.create("#2E2E2E")
-            
-            TaskList {
-            }
         
+        Container {
+            id: content
+            
+            background: Color.create("#222E2E")
+            
+            ListView {
+                dataModel: GroupDataModel {
+                    id: data
+                }
+                
+                
+                listItemComponents: [
+                    
+                    ListItemComponent {
+                        
+                        type: "listitem"
+                        
+                        StandardListItem {
+                            id: listItemComp  
+                            
+                            
+                            title: ListItemData.FolderName
+                            
+                            gestureHandlers:[ 
+                                TapHandler {
+                                    onTapped: {
+                                        listItemComp.ListItem.view.parent.parent.setClickedFolder(ListItemData.Id);
+                                        listItemComp.ListItem.view.parent.parent.pushFolderViewPage ();
+                                    }
+                                }
+                            
+                            ]
+                        }
+                    },
+                    
+                    ListItemComponent {
+                        type: "header"  
+                        
+                        Container {
+                            //Empty, we don't need a header
+                        }
+                    }
+                
+                ]
+                
+                function itemType(data, indexPath) {
+                    if(indexPath.length == 1){
+                        return "header";
+                    }
+                    else {
+                        return "listitem";
+                    }	
+                
+                }
+                
+                attachedObjects: [
+                    ContextModel {
+                        id: model
+                    }
+                ]
+                
+                onCreationCompleted: {
+                    model.fillFolderList();
+                    dataModel = model;
+                }
+            }
         }
         
         actions: [
-            
             ActionItem {
+                id: addAction
                 title: "Add"
-                ActionBar.placement: ActionBarPlacement.OnBar 
+                
+                ActionBar.placement: ActionBarPlacement.OnBar
                 
                 onTriggered: {
- 	              	mainpage.pushAddPage();
+                	var page = addFolderPage.createObject();
+                	navigationPane.push(page);
                 }
+                attachedObjects: [
+                    ComponentDefinition {
+                        id: addFolderPage
+                        source: "asset:///addFolder.qml"
+                    }    
+                ]
             }
+        
         ]
-    }
-    onPopTransitionEnded: { page.destroy(); }
+    
+    }    
 }

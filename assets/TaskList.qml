@@ -1,276 +1,308 @@
 import bb.cascades 1.0
 import list 1.0
 
+
 Container {
-    id: listContainer    
+    
+    property alias lView: listView
+    
+    id: mainContainer
+    
+    background: Color.create("#222E2E")
+    
+    
     
     Container {
-        id: addItemCont
-
-        rightPadding: 10
-        layout: StackLayout {
-            orientation: LayoutOrientation.LeftToRight
-        }
-        
-        TextField {
-            id: descField
-            hintText: "Task Description"
-            verticalAlignment: VerticalAlignment.Center
-        }
-        
-        Button {
-            id: add
-            text: "Save"
+        id: listContainer    
+                        
+        Container {
+            id: addItemCont
+            bottomMargin: 10
+                
+            background: Color.create("#1D2B2B")
             
-            preferredWidth: 10
-            onClicked: {
-                if (descField.text.length == 0) {
-                    mainpage.pushAddPage();           
+            rightPadding: 10
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
+            
+            TextField {
+                id: descField
+                hintText: "Task Description"
+                verticalAlignment: VerticalAlignment.Center
+            }
+            
+            Button {
+                id: add
+                text: "Save"
+                
+                preferredWidth: 10
+                onClicked: {
+                    if (descField.text.length == 0) {
+                        insideFolderPage.pushAddPage();           
+                    }
+                    else {
+                        var datee = new Date();
+                        Model.addNewTask(CppHelper.getClickedFolderName(), descField.text, datee , 0);
+                        descField.text = "";
+                    }
                 }
-                else {
-                    var datee = new Date();
-                    Model.addNewTask(descField.text, datee , 0);
-                    descField.text = "";
-                }
+            
             }
         
         }
-    
-    }
-    
-    ListView {
         
-        property string touchedItem : ""
-        
-        id: listView
-        
-        function getHeight () {
-            if (Device.getDevice() == 1)
-                return 1280;
-            else if(Device.getDevice() == 2)
-                return 720;
-            else if(Device.getDevice() == 3)
-                return 1280; 	
-        }
-        
-        function getWidth() {
-            if (Device.getDevice() == 1)
-                return 768;
-            else if(Device.getDevice() == 2)
-                return 720;
-            else if(Device.getDevice() == 3)
-                return 720; 	
-        }
-        
-        
-        //Push new page
-        function pushNewPage () {
-            mainpage.pushInfoPage()            
-        }
-        
-        //Passes touched Item Id to c++ helper function
-        //Not the best way but I haven't found a better way to pass touched item to taskinfo page
-        function passTouchedItem (taskId) {
-            CppHelper.setclickedTaskId(taskId) 	   
-        }
+        contextActions: [
+            ActionSet {
+                title: "Modify"
+                ActionItem {
+                    id: deleteAction
+                    title: "Delete"
+                }
+            }
+        ]
         
         function checkStat (taskId, newStat) {
-            Model.changeStat(taskId, newStat);
-        }
-        
-        dataModel: GroupDataModel {
-            id: data
-        
+            model.changeStat(taskId, newStat);
         }
         
         
-        listItemComponents: [
+        ListView {
             
-            ListItemComponent {
-                type: "header"
+            property string touchedItem : ""
+            
+            id: listView
+            
+            function getHeight () {
+                if (Device.getDevice() == 1)
+                    return 1280;
+                else if(Device.getDevice() == 2)
+                    return 720;
+                else if(Device.getDevice() == 3)
+                    return 1280; 	
+            }
+            
+            function getWidth() {
+                if (Device.getDevice() == 1)
+                    return 768;
+                else if(Device.getDevice() == 2)
+                    return 720;
+                else if(Device.getDevice() == 3)
+                    return 720; 	
+            }
+            
+            function addActionOnPressed () {
+                insideFolderPage.addAction(deleteAction, ActionBarPlacement.InOverflow);
+            }
+            
+            
+            
+            //Push new page
+            function pushNewPage () {
+                insideFolderPage.pushInfoPage()            
+            }
+            
+            //Passes touched Item Id to c++ helper function
+            //Not the best way but I haven't found a better way to pass touched item to taskinfo page
+            function passTouchedItem (taskId) {
+                CppHelper.setclickedTaskId(taskId) 	   
+            }
+
+            dataModel: GroupDataModel {
+                id: data
+            
+            }
+            
+            
+            listItemComponents: [
                 
-                Container {
-                    id: headerCont
-                    
-                    Label {
-                        id: headerTitle
-                        text: ListItemData == "2" ? "In Progress" : "Done"
-                        textStyle.fontStyle: FontStyle.Italic
-                        textStyle.fontSize: FontSize.Large
-                        textStyle.fontWeight: FontWeight.Bold
-                        
-                        //Have to add exact width of a device
-                        preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? headerCont.ListItem.view.getHeight() : headerCont.ListItem.view.getWidth()
-                    }
-                    background: Color.create("#4e4e4e")
-                    
-                    
-                    attachedObjects: [
-                        OrientationHandler {
-                            onOrientationAboutToChange: {
-                                if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                    headerTitle = headerCont.ListItem.view.getHeight();
-                                else 
-                                    headerTitle = headerCont.ListItem.view.getWidth();
-                            }
-                        }
-                    ] 
-                }
-            },
-            
-            ListItemComponent {
-                type: "listitem"
-                id:listComponent
-                Container {
-                    id: taskCont
-                    
-                    layout: StackLayout {
-                        orientation: LayoutOrientation.LeftToRight
-                    }
+                ListItemComponent {
+                    type: "header"
                     
                     Container {
-                        id: taskInfoCont
+                        id: headerCont
                         
-                        leftPadding: 10                        
-                        layout: StackLayout {
+                        leftPadding: 10    
+                        background: Color.create("#344343")
+                        
+                        Label {
+                            
+                            id: headerTitle
+                            text: ListItemData == 2 ? "In Progress" : "Done"
+                            textStyle.fontSize: FontSize.Small
+                            textStyle.fontWeight: FontWeight.Bold
+                            
+                            //Have to add exact width of a device
+                            preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? headerCont.ListItem.view.getHeight() : headerCont.ListItem.view.getWidth()
                         }
-                        
-                        Container {
-                            id: titleCont
-                            
-                            Label {
-                                multiline: false
-                                text: ListItemData.Description
-                                
-                                textStyle {
-                                    fontSize: FontSize.XLarge
-                                    color: Color.White
-                                    fontWeight: FontWeight.Bold
-                                }
-                            }
-                        }
-                        
-                        Container {
-                            id: dateTime
-                            
-                            preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
-                            
-                            layout: DockLayout {
-                            }
-                            
-                            Label {
-                                
-                                horizontalAlignment: HorizontalAlignment.Left
-                                verticalAlignment: VerticalAlignment.Center
-                                
-                                id: datetofinish
-                                text: ListItemData.DateCreated
-                                textStyle {
-                                    color: Color.create("#5c5c5c")
-                                    fontStyle: FontStyle.Italic
-                                }
-                            } 
-                        
-                        
-                        }
-                        
-                        gestureHandlers: [
-                            
-                            TapHandler {
-                                
-                                onTapped: {
-                                    taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
-                                    taskCont.ListItem.view.pushNewPage();
-                                
-                                }
-                                
-                                attachedObjects: ComponentDefinition {
-                                    id: infoPage;
-                                    source: "asset:///taskInfo.qml"                        
-                                }
-                            }
-                        ]
                         
                         attachedObjects: [
                             OrientationHandler {
-                                id: handler
                                 onOrientationAboutToChange: {
                                     if (OrientationSupport.orientation == UIOrientation.Portrait)
-                                        dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
+                                        headerTitle = headerCont.ListItem.view.getHeight();
                                     else 
-                                        dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
+                                        headerTitle = headerCont.ListItem.view.getWidth();
                                 }
-                            
                             }
-                        ]
-                    
-                    
+                        ] 
                     }
-                    
+                },
+                
+                ListItemComponent {
+                    type: "listitem"
+                    id:listComponent
                     Container {
-                        id: checkbox
+                        id: taskCont
                         
-                        verticalAlignment: VerticalAlignment.Center
-                        rightPadding: 10
+                        layout: StackLayout {
+                            orientation: LayoutOrientation.LeftToRight
+                        }
                         
-                        property bool changedValue;
-                        CheckBox {
-                            id: chkbox
-                            signal timeElapsed()
+                        Container {
+                            id: taskInfoCont
                             
-                            verticalAlignment: VerticalAlignment.Center
-                            checked: ListItemData.Status == "1" ? true: false
-                            
-                            onCheckedChanged: {
-                                checkbox.changedValue = chkbox.checked;
-                                clickedTimer.start();
+                            leftPadding: 20                      
+                            layout: StackLayout {
                             }
+                            
+                            Container {
+                                id: titleCont
+                                
+                                Label {
+                                    multiline: false
+                                    text: ListItemData.Description
+                                    
+                                    textStyle {
+                                        fontSize: FontSize.XLarge
+                                        color: Color.White
+                                    }
+                                }
+                            }
+                            
+                            Container {
+                                id: dateTime
+                                
+                                preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
+                                
+                                layout: DockLayout {
+                                }
+                                
+                                Label {
+                                    
+                                    horizontalAlignment: HorizontalAlignment.Left
+                                    verticalAlignment: VerticalAlignment.Center
+                                    
+                                    id: datetofinish
+                                    text: ListItemData.DateCreated
+                                    textStyle {
+                                        color: Color.Gray
+                                        fontStyle: FontStyle.Italic
+                                    }
+                                } 
+                            
+                            
+                            }
+                                                                                    
+                            gestureHandlers: [
+                                
+                                LongPressHandler {
+                                    onLongPressed: {
+                                        taskCont.ListItem.view.addActionOnPressed ();
+                                    }
+                                },
+                                
+                                TapHandler {
+                                    
+                                                                        
+                                    onTapped: {
+                                        taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
+                                        taskCont.ListItem.view.pushNewPage();
+                                    
+                                    }
+                            
+                            		
+                                    
+                                    attachedObjects: ComponentDefinition {
+                                        id: infoPage;
+                                        source: "asset:///taskInfo.qml"                        
+                                    }
+                                }
+                            ]
+                            
+                            attachedObjects: [
+                                OrientationHandler {
+                                    id: handler
+                                    onOrientationAboutToChange: {
+                                        if (OrientationSupport.orientation == UIOrientation.Portrait)
+                                            dateTime.preferredWidth = taskCont.ListItem.view.getHeight();
+                                        else 
+                                            dateTime.preferredWidth = taskCont.ListItem.view.getWidth();
+                                    }
+                                
+                                }
+                            ]
+                        
                         
                         }
                         
-                        attachedObjects: [
+                        Container {
+                            id: checkbox
                             
-                            QTimer {
-                                id: clickedTimer
-                                interval: 800
+                            verticalAlignment: VerticalAlignment.Center
+                            rightPadding: 10
+                            
+                            property bool changedValue;
+                            CheckBox {
+                                id: chkbox
+                                signal timeElapsed()
                                 
-                                onTimeout: {
-                                    if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);
-                                    else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
-                                        taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);                                
+                                verticalAlignment: VerticalAlignment.Center
+                                checked: ListItemData.Status == 1 ? true: false
+                                
+                                onCheckedChanged: {
+                                    checkbox.changedValue = chkbox.checked;
+                                    clickedTimer.start();
                                 }
+                            
                             }
-                        ]            
-                    }
-                
-                } // end of second ListItemComponent
+                            
+                            attachedObjects: [
+                                
+                                QTimer {
+                                    id: clickedTimer
+                                    interval: 800
+                                    
+                                    onTimeout: {
+                                        if (chkbox.checked == checkbox.changedValue && chkbox.checked == true) {
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 1);
+                                            clickedTimer.stop();
+                                        }
+                                        else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 2);    
+                                            clickedTimer.stop();
+                                        }                            
+                                    }
+                                }
+                            ]            
+                        }
+                    
+                    } // end of second ListItemComponent
+                }
+            ]
+            
+            function itemType(data, indexPath) {
+                if(indexPath.length == 1){
+                    return "header";
+                }
+                else {
+                    return "listitem";
+                }	
+            
             }
-        ]
-        
-        function itemType(data, indexPath) {
-            if(indexPath.length == 1){
-                return "header";
-            }
-            else {
-                return "listitem";
-            }	
-        
         }
-        
-        onCreationCompleted: {
-            listView.dataModel = Model.get();
-            apear.play();
-        }
-        
-        animations: [
-            TranslateTransition {
-                id: apear
-                duration: 700
-                
-                //Max Y of a device
-                fromY: 1024
-            }
-        ]
     }
+
 }
+
+

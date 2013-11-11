@@ -1,8 +1,10 @@
 1
-6
+8
 taskInfo.qml
+addFolder.qml
 main.qml
 addPage.qml
+folderView.qml
 test.json
 TaskList.qml
 waiterThread.js

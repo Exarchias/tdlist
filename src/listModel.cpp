@@ -73,7 +73,7 @@ int ListModel::getStatus (int id) {
 
 }
 
-int ListModel::addNewTask(QString folder, QString description, QDateTime dateToFinish, int isReminded) {
+int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinish, int isReminded) {
 	//Creating the new task
 	QVariantMap newTask;
 	//newTask["taskId"] = QString::number(lastId+1);

@@ -62,6 +62,11 @@ Container {
             }
         ]
         
+        function checkStat (taskId, newStat) {
+            model.changeStat(taskId, newStat);
+        }
+        
+        
         ListView {
             
             property string touchedItem : ""
@@ -102,11 +107,7 @@ Container {
             function passTouchedItem (taskId) {
                 CppHelper.setclickedTaskId(taskId) 	   
             }
-            
-            function checkStat (taskId, newStat) {
-                model.changeStat(taskId, newStat);
-            }
-            
+
             dataModel: GroupDataModel {
                 id: data
             
@@ -273,10 +274,14 @@ Container {
                                     interval: 800
                                     
                                     onTimeout: {
-                                        if (chkbox.checked == checkbox.changedValue && chkbox.checked == true)
-                                            taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 1);
-                                        else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false)
-                                            taskCont.ListItem.view.checkStat (ListItemData.DateCreated, 2);                                
+                                        if (chkbox.checked == checkbox.changedValue && chkbox.checked == true) {
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 1);
+                                            clickedTimer.stop();
+                                        }
+                                        else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 2);    
+                                            clickedTimer.stop();
+                                        }                            
                                     }
                                 }
                             ]            

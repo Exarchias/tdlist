@@ -17,16 +17,16 @@ class ContextModel: public bb::cascades::GroupDataModel {
 
 	Q_OBJECT
 
-	Q_PROPERTY(QString folder READ folder WRITE setFolder)
+	Q_PROPERTY(int folder READ folder WRITE setFolder)
 
 public:
 	ContextModel();
 	virtual ~ContextModel();
 
-	QString folder();
-	void setFolder(QString FolderName);
+	int folder();
+	void setFolder(int FolderName);
 
-	Q_INVOKABLE int addNewTask (QString folderName, QString description, QDateTime dateToFinish, int isReminded);
+	Q_INVOKABLE int addNewTask (int folderName, QString description, QDateTime dateToFinish, int isReminded);
 	Q_INVOKABLE int removeTask (int dateCreated);
 	Q_INVOKABLE bool isReminded (int taskID);
 	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
@@ -39,7 +39,7 @@ public:
 
 	Q_INVOKABLE void addNewFolder (QString name);
 
-	Q_INVOKABLE void fillByFolderName ();
+	Q_INVOKABLE void fillByFolderId (int);
 	Q_INVOKABLE void fillEntire();
 	Q_INVOKABLE void fillFolderList ();
 
@@ -52,7 +52,7 @@ private slots:
 
 private:
 	ListModel* m_mainModel;
-	QString m_folderName;
+	int m_folderName;
 
 private:
 	//Whether it is displaying folders or actual data. 0 for folders, 1 for entries

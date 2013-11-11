@@ -41,6 +41,10 @@ Page {
         
         //background: Color.create("#2E2E2E")
         
+        Label {
+            id:testLabel
+        }
+        
         TaskList {
             id: tList
         }
@@ -52,7 +56,8 @@ Page {
         ]
         
         onCreationCompleted: {
-            model.fillByFolderName();
+            testLabel.text = model.folder
+            model.fillByFolderId(CppHelper.getClickedFolderName());
             tList.lView.dataModel = model;
         }
         

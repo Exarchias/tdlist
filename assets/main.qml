@@ -60,7 +60,9 @@ NavigationPane {
                             title: ListItemData.FolderName
                             
                             gestureHandlers:[ 
+                                
                                 TapHandler {
+                                    
                                     onTapped: {
                                         listItemComp.ListItem.view.parent.parent.setClickedFolder(ListItemData.Id);
                                         listItemComp.ListItem.view.parent.parent.pushFolderViewPage ();

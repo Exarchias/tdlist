@@ -52,7 +52,6 @@ Page {
         ]
         
         onCreationCompleted: {
-            testLabel.text = model.folder
             model.fillByFolderId(CppHelper.getClickedFolderName());
             tList.lView.dataModel = model;
         }

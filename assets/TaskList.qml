@@ -127,7 +127,7 @@ Container {
                         Label {
                             
                             id: headerTitle
-                            text: ListItemData == "2" ? "In Progress" : "Done"
+                            text: ListItemData == 2 ? "In Progress" : "Done"
                             textStyle.fontSize: FontSize.Small
                             textStyle.fontWeight: FontWeight.Bold
                             
@@ -257,7 +257,7 @@ Container {
                                 signal timeElapsed()
                                 
                                 verticalAlignment: VerticalAlignment.Center
-                                checked: ListItemData.Status == "1" ? true: false
+                                checked: ListItemData.Status == 1 ? true: false
                                 
                                 onCheckedChanged: {
                                     checkbox.changedValue = chkbox.checked;

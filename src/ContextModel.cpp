@@ -48,11 +48,14 @@ void ContextModel::setFolder(QString FolderName) {
 }
 
 void ContextModel::fillEntire () {
-	QVariantList it = m_mainModel->first();
-	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
-		this->insert(m_mainModel->data(it).toMap());
-		it = m_mainModel->after(it);
-	}
+
+	this->insertList(m_mainModel->getData());
+
+	//	QVariantList it = m_mainModel->first();
+//	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
+//		this->insert(m_mainModel->data(it).toMap());
+//		it = m_mainModel->after(it);
+//	}
 }
 
 void ContextModel::fillByFolderName () {
@@ -64,13 +67,10 @@ void ContextModel::fillByFolderName () {
 
 	this->setSortingKeys(keyList);
 	this->clear();
-	QVariantList it = m_mainModel->first();
-	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
-		if (m_mainModel->data(it).toMap()["Folder"].toString() == m_folderName) {
-			this->insert(m_mainModel->data(it).toMap());
+	for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
+		if (m_mainModel->getData().at(i).toMap()["Folder"].toString() == m_folderName) {
+			this->insert(m_mainModel->getData().at(i).toMap());
 		}
-
-		it = m_mainModel->after(it);
 	}
 
 	//A bug in BB SDK. Have to put following after insert(...)

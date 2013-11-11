@@ -14,7 +14,7 @@
 
 enum taskStatus {inProgress = 0, Finished, withdrow};
 
-class ListModel : public bb::cascades::GroupDataModel
+class ListModel : public QObject
 {
 
 Q_OBJECT
@@ -43,7 +43,7 @@ public:
 	void deleteFolder (QString fName);
 	QVariantList getFolderList ();
 
-	ListModel* get();
+	QVariantList getData() const;
 
 	static ListModel* Instance();
 
@@ -63,6 +63,7 @@ private:
 
 private:
 	QVariantList m_folderList;
+	QVariantList m_fullDataList;
 
 private:
 	static ListModel* m_instance;

@@ -28,13 +28,17 @@ Container {
             
             TextField {
                 id: descField
-                hintText: "Task Description"
+                hintText: "Search/Add"
                 verticalAlignment: VerticalAlignment.Center
+                
+                onTextChanging: {
+                    model.searchData(descField.text);
+                }
             }
             
             Button {
                 id: add
-                text: "Save"
+                text: "Add"
                 
                 preferredWidth: 10
                 onClicked: {

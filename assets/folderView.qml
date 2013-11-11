@@ -40,16 +40,17 @@ Page {
         id: main_content
         
         //background: Color.create("#2E2E2E")
-        
-        TaskList {
-            id: tList
-        }
         attachedObjects: [
             ContextModel {
                 id: model
                 folder: CppHelper.getClickedFolderName()
             }
         ]
+        
+        TaskList {
+            id: tList
+        }
+
         
         onCreationCompleted: {
             model.fillByFolderName();

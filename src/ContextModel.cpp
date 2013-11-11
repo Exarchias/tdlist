@@ -29,6 +29,17 @@ ContextModel::~ContextModel() {
 	// TODO Auto-generated destructor stub
 }
 
+void ContextModel::searchData (QString searchWord) {
+	this->clear();
+	int lengthOfWord = searchWord.length();
+	for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
+		if (m_mainModel->getData().at(i).toMap()["Description"].toString().startsWith(searchWord, Qt::CaseInsensitive) &&
+				m_mainModel->getData().at(i).toMap()["Folder"].toString() == m_folderName) {
+			this->insert(m_mainModel->getData().at(i).toMap());
+		}
+	}
+}
+
 QString ContextModel::getFolderName (int id) {
 	QVariantList it = this->first();
 	for (unsigned int i = 0; i < this->size(); i++) {
@@ -52,10 +63,10 @@ void ContextModel::fillEntire () {
 	this->insertList(m_mainModel->getData());
 
 	//	QVariantList it = m_mainModel->first();
-//	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
-//		this->insert(m_mainModel->data(it).toMap());
-//		it = m_mainModel->after(it);
-//	}
+	//	for (unsigned int i = 0; i < m_mainModel->size(); i++) {
+	//		this->insert(m_mainModel->data(it).toMap());
+	//		it = m_mainModel->after(it);
+	//	}
 }
 
 void ContextModel::fillByFolderName () {

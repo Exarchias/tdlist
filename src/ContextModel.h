@@ -43,6 +43,9 @@ public:
 	Q_INVOKABLE void fillEntire();
 	Q_INVOKABLE void fillFolderList ();
 
+public slots:
+	void searchData (QString searchWord);
+
 private slots:
 	void onNewTaskAdded(QVariantMap newTask);
 	void onTaskRemoved (int Id);

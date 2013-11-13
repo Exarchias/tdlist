@@ -14,11 +14,34 @@ Container {
     
     Container {
         id: listContainer    
-                        
+        
+        signal timedOut()
+        
+        function resetTimer () {
+            globalClickedTimer.start();
+        }
+        
+        function stopTimer () {
+            globalClickedTimer.stop();
+        }
+        
+        attachedObjects: [
+            QTimer {
+                id: globalClickedTimer
+                interval: 1000
+                    
+                onTimeout: {
+                    listContainer.timedOut();
+                }            
+            }
+        ]
+        
+        
+        
         Container {
             id: addItemCont
             bottomMargin: 10
-                
+            
             background: Color.create("#1D2B2B")
             
             rightPadding: 10
@@ -70,7 +93,6 @@ Container {
             model.changeStat(taskId, newStat);
         }
         
-        
         ListView {
             
             property string touchedItem : ""
@@ -94,7 +116,7 @@ Container {
                 else if(Device.getDevice() == 3)
                     return 720; 	
             }
-           
+            
             //Push new page
             function pushNewPage () {
                 insideFolderPage.pushInfoPage()            
@@ -105,7 +127,7 @@ Container {
             function passTouchedItem (taskId) {
                 CppHelper.setclickedTaskId(taskId) 	   
             }
-
+            
             dataModel: GroupDataModel {
                 id: data
             
@@ -201,20 +223,20 @@ Container {
                             
                             
                             }
-                                                                                    
+                            
                             gestureHandlers: [
                                 
-                                                      
+                                
                                 TapHandler {
                                     
-                                                                        
+                                    
                                     onTapped: {
                                         taskCont.ListItem.view.passTouchedItem(ListItemData.DateCreated);
                                         taskCont.ListItem.view.pushNewPage();
                                     
                                     }
-                            
-                            		
+                                    
+                                    
                                     
                                     attachedObjects: ComponentDefinition {
                                         id: infoPage;
@@ -255,29 +277,28 @@ Container {
                                 
                                 onCheckedChanged: {
                                     checkbox.changedValue = chkbox.checked;
-                                    clickedTimer.start();
+                                    taskCont.ListItem.view.parent.resetTimer();
+                                    //clickedTimer.start();
+                                }
+                                
+                                onCreationCompleted: {
+                                    taskCont.ListItem.view.parent.timedOut.connect(changeStat);
+                                }
+                                
+                                function changeStat () {
+                                    if (chkbox.checked == checkbox.changedValue && chkbox.checked == true) {
+                                        taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "1");
+                                        taskCont.ListItem.view.parent.stopTimer ();
+                                    }
+                                    else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
+                                        taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "2");    
+                                        taskCont.ListItem.view.globalClickedTimer.parent.stopTimer ();
+                                    }         
+                                
                                 }
                             
                             }
-                            
-                            attachedObjects: [
-                                
-                                QTimer {
-                                    id: clickedTimer
-                                    interval: 800
-                                    
-                                    onTimeout: {
-                                        if (chkbox.checked == checkbox.changedValue && chkbox.checked == true) {
-                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "1");
-                                            clickedTimer.stop();
-                                        }
-                                        else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
-                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "2");    
-                                            clickedTimer.stop();
-                                        }                            
-                                    }
-                                }
-                            ]            
+
                         }
                     
                     } // end of second ListItemComponent

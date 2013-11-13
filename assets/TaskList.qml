@@ -94,13 +94,7 @@ Container {
                 else if(Device.getDevice() == 3)
                     return 720; 	
             }
-            
-            function addActionOnPressed () {
-                insideFolderPage.addAction(deleteAction, ActionBarPlacement.InOverflow);
-            }
-            
-            
-            
+           
             //Push new page
             function pushNewPage () {
                 insideFolderPage.pushInfoPage()            
@@ -210,12 +204,7 @@ Container {
                                                                                     
                             gestureHandlers: [
                                 
-                                LongPressHandler {
-                                    onLongPressed: {
-                                        taskCont.ListItem.view.addActionOnPressed ();
-                                    }
-                                },
-                                
+                                                      
                                 TapHandler {
                                     
                                                                         

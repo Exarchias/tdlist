@@ -8,33 +8,54 @@ TabbedPane {
         id: page1
         
         Navigation {
-            
+        
         }
     }
     
     Tab {
         title: "All"
         
-        Page {
-            
-            titleBar: TitleBar {
-                title: "All tasks"
-            }
-            
-            TaskList {
-                id: tskList
-            }
-            
-            attachedObjects: [
-                ContextModel {
-                    id: model
-                    folder: CppHelper.getClickedFolderName()
+        NavigationPane {
+            id: navigationPane        
+            Page {
+                id: insideFolderPage
+                titleBar: TitleBar {
+                    title: "All tasks"
                 }
-            ]
-            
-            onCreationCompleted: {
-                model.fillEntire();
-                tskList.lView.dataModel = model;
+                
+                function pushInfoPage() {
+                    var page = testpage.createObject();
+                    navigationPane.push(page);	
+                }
+                function pushAddPage () {
+                    var page = addPage.createObject();
+                    navigationPane.push(page); 
+                }
+                attachedObjects: [
+                    ComponentDefinition {
+                        id: testpage;
+                        source: "asset:///taskInfo.qml"
+                    },
+                    
+                    ComponentDefinition {
+                        id:addPage
+                        source: "asset:///addPage.qml"
+                    },
+                    
+                    ContextModel {
+                        id: model
+                        folder: CppHelper.getClickedFolderName()
+                    }
+                ]
+                
+                TaskList {
+                    id: tskList
+                }
+                                  
+                onCreationCompleted: {
+                    model.fillEntire();
+                    tskList.lView.dataModel = model;
+                }
             }
         }
     }

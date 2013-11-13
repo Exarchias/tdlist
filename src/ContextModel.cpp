@@ -65,6 +65,13 @@ void ContextModel::fillEntire () {
 	//		this->insert(m_mainModel->data(it).toMap());
 	//		it = m_mainModel->after(it);
 	//	}
+	QStringList keyList;
+	keyList << "Status" << "DateCreated";
+	this->setSortingKeys(keyList);
+
+	//A bug in BB SDK. Have to put following after insert(...)
+	this->setSortedAscending(false);
+
 }
 
 void ContextModel::fillByFolderId (int folderid) {

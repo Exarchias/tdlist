@@ -132,7 +132,7 @@ Container {
                         Label {
                             
                             id: headerTitle
-                            text: ListItemData == 2 ? "In Progress" : "Done"
+                            text: ListItemData == "2" ? "In Progress" : "Done"
                             textStyle.fontSize: FontSize.Small
                             textStyle.fontWeight: FontWeight.Bold
                             
@@ -262,7 +262,7 @@ Container {
                                 signal timeElapsed()
                                 
                                 verticalAlignment: VerticalAlignment.Center
-                                checked: ListItemData.Status == 1 ? true: false
+                                checked: ListItemData.Status == "1" ? true: false
                                 
                                 onCheckedChanged: {
                                     checkbox.changedValue = chkbox.checked;
@@ -279,11 +279,11 @@ Container {
                                     
                                     onTimeout: {
                                         if (chkbox.checked == checkbox.changedValue && chkbox.checked == true) {
-                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 1);
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "1");
                                             clickedTimer.stop();
                                         }
                                         else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
-                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, 2);    
+                                            taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "2");    
                                             clickedTimer.stop();
                                         }                            
                                     }

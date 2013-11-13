@@ -30,7 +30,7 @@ public:
 	Q_INVOKABLE int removeTask (int dateCreated);
 	Q_INVOKABLE bool isReminded (int taskID);
 	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
-	Q_INVOKABLE int changeStat (int dateCreated, int taskStatus);
+	Q_INVOKABLE int changeStat (int dateCreated, QString taskStatus);
 
 	Q_INVOKABLE QString getDesctiption(int id);
 	Q_INVOKABLE QString getDatetoFinish(int id);
@@ -49,7 +49,7 @@ public slots:
 private slots:
 	void onNewTaskAdded(QVariantMap newTask);
 	void onTaskRemoved (int Id);
-	void onStatusChanged(int, int);
+	void onStatusChanged(int, QString);
 	void onEntryReplaced (int, QVariantMap);
 	void onNewFolderAdded (QVariantMap);
 

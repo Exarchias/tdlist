@@ -20,7 +20,7 @@ ContextModel::ContextModel() {
 
 	connect (m_mainModel, SIGNAL(newTaskAdded(QVariantMap)), this, SLOT(onNewTaskAdded(QVariantMap)));
 	connect (m_mainModel, SIGNAL(taskRemoved(int)), this, SLOT(onTaskRemoved(int)));
-	connect (m_mainModel, SIGNAL(statusChanged(int,int)), this, SLOT(onStatusChanged(int,int)));
+	connect (m_mainModel, SIGNAL(statusChanged(int, QString)), this, SLOT(onStatusChanged(int,QString)));
 	connect (m_mainModel, SIGNAL(entryReplaced(int,QVariantMap)), this, SLOT(onEntryReplaced(int, QVariantMap)));
 	connect (m_mainModel, SIGNAL(folderAdded(QVariantMap)), this, SLOT (onNewFolderAdded(QVariantMap)));
 }
@@ -105,7 +105,7 @@ int ContextModel::replaceEntry (int taskID, QString newDescription, QDateTime ne
 	return m_mainModel->replaceEntry(taskID, newDescription, newDateToFinish, newisReminded);
 }
 
-int ContextModel::changeStat (int dateCreated, int taskStatus) {
+int ContextModel::changeStat (int dateCreated, QString taskStatus) {
 	return m_mainModel->changeStat(dateCreated, taskStatus);
 }
 
@@ -137,13 +137,13 @@ void ContextModel::onTaskRemoved (int id) {
 	}
 }
 
-void ContextModel::onStatusChanged (int id, int newStatus) {
+void ContextModel::onStatusChanged (int id, QString newStatus) {
 	QVariantMap updatedData;
 	QVariantList it = this->first();
 	for (unsigned int i = 0; i < this->size(); i++) {
 		if (this->data(it).toMap()["DateCreated"] == id) {
 			updatedData = this->data(it).toMap();
-			updatedData["Status"] = QString::number(newStatus);
+			updatedData["Status"] = newStatus;
 			this->updateItem(it, updatedData);
 			break;
 		}

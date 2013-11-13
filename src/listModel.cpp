@@ -79,7 +79,7 @@ int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinis
 	//newTask["taskId"] = QString::number(lastId+1);
 	newTask["Remind"] = isReminded;
 	newTask["Description"] = description;
-	newTask["Status"] = 2;
+	newTask["Status"] = QString::number(2);
 	newTask["DateToFinish"] = dateToFinish.toTime_t();
 	newTask["DateCreated"] = QDateTime::currentDateTime().toTime_t();
 	newTask["Folder"] = folder;
@@ -151,7 +151,7 @@ int ListModel::removeTask (std::vector<int> datesCreated) {
 	return 0;
 }
 
-int ListModel::changeStat (int dateCreated, int taskStatus) {
+int ListModel::changeStat (int dateCreated, QString taskStatus) {
 	QVariantMap updatedData;
 	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
 		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == dateCreated) {

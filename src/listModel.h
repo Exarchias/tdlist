@@ -33,7 +33,7 @@ public:
 	int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
 
 	//Change statuses of one or multiple tasks' at once
-	int changeStat (int dateCreated, int taskStatus);
+	int changeStat (int dateCreated, QString taskStatus);
 
 	QString getDesctiption(int id);
 	QString getDatetoFinish(int id);
@@ -51,7 +51,7 @@ signals:
 	void newTaskAdded (QVariantMap);
 	void taskRemoved(int dateCreated);
 	void tasksRemoved(std::vector<int> datesCreated);
-	void statusChanged (int dateCreated, int newStatus);
+	void statusChanged (int dateCreated, QString newStatus);
 	void entryReplaced (int id, QVariantMap newEntry);
 
 	void folderAdded (QVariantMap);

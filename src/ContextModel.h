@@ -52,6 +52,7 @@ private slots:
 	void onStatusChanged(int, QString);
 	void onEntryReplaced (int, QVariantMap);
 	void onNewFolderAdded (QVariantMap);
+	void fillmdata (QVariantList);
 
 private:
 	ListModel* m_mainModel;
@@ -61,6 +62,7 @@ private:
 	//Whether it is displaying folders or actual data. 0 for folders, 1 for entries
 	int m_dataMode;
 
+	QVariantList m_data;
 
 
 };

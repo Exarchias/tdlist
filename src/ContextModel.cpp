@@ -15,7 +15,7 @@ ContextModel::ContextModel() {
 
 	QStringList keyList;
 	//keyList << "Status" << "DateCreated";
-
+	m_folderName = 0;
 	//this->setSortingKeys(keyList);
 
 	connect (m_mainModel, SIGNAL(newTaskAdded(QVariantMap)), this, SLOT(onNewTaskAdded(QVariantMap)));
@@ -25,19 +25,29 @@ ContextModel::ContextModel() {
 	connect (m_mainModel, SIGNAL(folderAdded(QVariantMap)), this, SLOT (onNewFolderAdded(QVariantMap)));
 }
 
+void ContextModel::fillmdata (QVariantList it) {
+	m_data.append(this->data(it));
+}
+
 ContextModel::~ContextModel() {
 	// TODO Auto-generated destructor stub
 }
 
 void ContextModel::searchData (QString searchWord) {
 	this->clear();
-	int lengthOfWord = searchWord.length();
-	for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
-		if (m_mainModel->getData().at(i).toMap()["Description"].toString().startsWith(searchWord, Qt::CaseInsensitive) &&
-				m_mainModel->getData().at(i).toMap()["Folder"].toInt() == m_folderName) {
-			this->insert(m_mainModel->getData().at(i).toMap());
+	if (m_folderName != 0)
+		for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
+			if (m_mainModel->getData().at(i).toMap()["Description"].toString().startsWith(searchWord, Qt::CaseInsensitive) &&
+					m_mainModel->getData().at(i).toMap()["Folder"].toInt() == m_folderName) {
+				this->insert(m_mainModel->getData().at(i).toMap());
+			}
 		}
-	}
+	else
+		for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
+			if (m_mainModel->getData().at(i).toMap()["Description"].toString().startsWith(searchWord, Qt::CaseInsensitive)) {
+				this->insert(m_mainModel->getData().at(i).toMap());
+			}
+		}
 }
 
 QString ContextModel::getFolderName (int id) {
@@ -76,8 +86,6 @@ void ContextModel::fillEntire () {
 
 void ContextModel::fillByFolderId (int folderid) {
 	m_dataMode = 1;
-
-
 
 	this->clear();
 	for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {

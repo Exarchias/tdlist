@@ -22,7 +22,8 @@ public:
 	ListModel();
 
 	//IsReminded- 0 for false, 1 for true
-	int addNewTask (int folder, QString description, QDateTime dateToFinish, int isReminded);
+	int addNewTask (int folder, QString description, QDateTime dateToFinish, int isReminded,
+			int quantity, int price, QStringList* taglist);
 
 	//Remove one or multiple tasks at once
 	int removeTask (int dateCreated);
@@ -39,7 +40,7 @@ public:
 	QString getDatetoFinish(int id);
 	int getStatus (int id);
 
-	void addNewFolder (QString fName);
+	void addNewFolder (QString fName, QString type);
 	void deleteFolder (QString fName);
 	QVariantList getFolderList ();
 

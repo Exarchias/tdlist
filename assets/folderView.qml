@@ -7,7 +7,7 @@ Page {
     
     /*Title bar*/
     titleBar : TitleBar {
-        title: folderPage.getFolderName (CppHelper.getClickedFolderName ())
+        title: FolderModel.getFolderName (CppHelper.getClickedFolderName ())
     }
     
     //I have to push "taskInfo.qml" from main, s

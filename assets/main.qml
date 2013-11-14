@@ -4,7 +4,7 @@ import list 1.0
 
 TabbedPane {
     Tab {
-        title: "Folder"
+        title: "Groups"
         id: page1
         
         Navigation {

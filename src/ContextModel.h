@@ -26,7 +26,8 @@ public:
 	int folder();
 	void setFolder(int FolderName);
 
-	Q_INVOKABLE int addNewTask (int folderName, QString description, QDateTime dateToFinish, int isReminded);
+	Q_INVOKABLE int addNewTask (int folderName, QString description, QDateTime dateToFinish, int isReminded,
+			int quantity, int price);
 	Q_INVOKABLE int removeTask (int dateCreated);
 	Q_INVOKABLE bool isReminded (int taskID);
 	Q_INVOKABLE int replaceEntry (int taskID, QString newDescription, QDateTime newDateToFinish, int newisReminded);
@@ -35,13 +36,9 @@ public:
 	Q_INVOKABLE QString getDesctiption(int id);
 	Q_INVOKABLE QString getDatetoFinish(int id);
 	Q_INVOKABLE int getStatus (int id);
-	Q_INVOKABLE QString getFolderName (int id);
-
-	Q_INVOKABLE void addNewFolder (QString name);
 
 	Q_INVOKABLE void fillByFolderId (int);
 	Q_INVOKABLE void fillEntire();
-	Q_INVOKABLE void fillFolderList ();
 
 public slots:
 	void searchData (QString searchWord);
@@ -51,7 +48,6 @@ private slots:
 	void onTaskRemoved (int Id);
 	void onStatusChanged(int, QString);
 	void onEntryReplaced (int, QVariantMap);
-	void onNewFolderAdded (QVariantMap);
 	void fillmdata (QVariantList);
 
 private:
@@ -59,8 +55,6 @@ private:
 	int m_folderName;
 
 private:
-	//Whether it is displaying folders or actual data. 0 for folders, 1 for entries
-	int m_dataMode;
 
 	QVariantList m_data;
 

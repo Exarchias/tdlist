@@ -23,6 +23,7 @@ class TDList : public QObject
 public:
     TDList(bb::cascades::Application *app);
     virtual ~TDList() { }
+
 private slots:
 
 private:

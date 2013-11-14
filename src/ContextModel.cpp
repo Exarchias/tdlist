@@ -9,7 +9,6 @@
 
 
 ContextModel::ContextModel() {
-	// TODO Auto-generated constructor stub
 	m_mainModel = ListModel::Instance();
 	this->setSortedAscending(false);
 
@@ -22,7 +21,6 @@ ContextModel::ContextModel() {
 	connect (m_mainModel, SIGNAL(taskRemoved(int)), this, SLOT(onTaskRemoved(int)));
 	connect (m_mainModel, SIGNAL(statusChanged(int, QString)), this, SLOT(onStatusChanged(int,QString)));
 	connect (m_mainModel, SIGNAL(entryReplaced(int,QVariantMap)), this, SLOT(onEntryReplaced(int, QVariantMap)));
-	connect (m_mainModel, SIGNAL(folderAdded(QVariantMap)), this, SLOT (onNewFolderAdded(QVariantMap)));
 }
 
 void ContextModel::fillmdata (QVariantList it) {
@@ -50,13 +48,6 @@ void ContextModel::searchData (QString searchWord) {
 		}
 }
 
-QString ContextModel::getFolderName (int id) {
-	for (unsigned int i = 0; i < m_mainModel->getFolderList().size(); i++) {
-		if (m_mainModel->getFolderList().at(i).toMap()["Id"].toInt() == id) {
-			return m_mainModel->getFolderList().at(i).toMap()["FolderName"].toString();
-		}
-	}
-}
 
 int ContextModel::folder() {
 	return m_folderName;
@@ -85,8 +76,6 @@ void ContextModel::fillEntire () {
 }
 
 void ContextModel::fillByFolderId (int folderid) {
-	m_dataMode = 1;
-
 	this->clear();
 	for (unsigned int i = 0; i < m_mainModel->getData().size(); i++) {
 		if (m_mainModel->getData().at(i).toMap()["Folder"].toInt() == m_folderName) {
@@ -102,9 +91,10 @@ void ContextModel::fillByFolderId (int folderid) {
 }
 
 
-int ContextModel::addNewTask ( int folderName, QString description, QDateTime dateToFinish, int isReminded) {
+int ContextModel::addNewTask ( int folderName, QString description, QDateTime dateToFinish, int isReminded,
+		int quantity, int price) {
 
-	return m_mainModel->addNewTask(folderName, description, dateToFinish, isReminded);
+	return m_mainModel->addNewTask(folderName, description, dateToFinish, isReminded, quantity, price, NULL);
 
 }
 
@@ -137,7 +127,7 @@ int ContextModel::getStatus (int id) {
 }
 
 void ContextModel::onNewTaskAdded (QVariantMap newtask) {
-	if (m_dataMode == 1 && m_folderName == newtask["Folder"].toInt())
+	if (m_folderName == newtask["Folder"].toInt())
 		this->insert(newtask);
 }
 
@@ -177,21 +167,4 @@ void ContextModel::onEntryReplaced (int id, QVariantMap newEntry) {
 	}
 }
 
-void ContextModel::onNewFolderAdded(QVariantMap newFolder) {
 
-	if (m_dataMode == 0)
-		this->insert(newFolder);
-
-}
-
-void ContextModel::fillFolderList () {
-	m_dataMode = 0;
-
-	this->insertList(m_mainModel->getFolderList());
-	//Sort in Ascending order when folders are data
-	this->setSortedAscending(true);
-}
-
-void ContextModel::addNewFolder (QString name) {
-	m_mainModel->addNewFolder(name);
-}

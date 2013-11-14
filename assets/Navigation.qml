@@ -11,7 +11,7 @@ NavigationPane {
         titleBar: TitleBar {
             id: ttlbar
             
-            title: "Folder List"
+            title: "Group List"
         }
         
         function setClickedFolder (folderName) {
@@ -42,6 +42,7 @@ NavigationPane {
             background: Color.create("#222E2E")
             
             ListView {
+                id: lstView
                 dataModel: GroupDataModel {
                     id: data
                 }
@@ -94,14 +95,13 @@ NavigationPane {
                 }
                 
                 attachedObjects: [
-                    ContextModel {
+                    ContextFolderModel {
                         id: model
                     }
                 ]
                 
                 onCreationCompleted: {
-                    model.fillFolderList();
-                    dataModel = model;
+                    dataModel = model
                 }
             }
         }

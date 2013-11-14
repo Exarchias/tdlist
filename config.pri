@@ -3,35 +3,47 @@ BASEDIR =  $$quote($$_PRO_FILE_PWD_)
 
 device {
     CONFIG(debug, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextFolderModel.cpp) \
+                 $$quote($$BASEDIR/src/ContextModel.cpp) \
                  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+                 $$quote($$BASEDIR/src/GroupModifier.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextFolderModel.h) \
+                 $$quote($$BASEDIR/src/ContextModel.h) \
                  $$quote($$BASEDIR/src/DeviceSettings.h) \
+                 $$quote($$BASEDIR/src/GroupModifier.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }
 
     CONFIG(release, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextFolderModel.cpp) \
+                 $$quote($$BASEDIR/src/ContextModel.cpp) \
                  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+                 $$quote($$BASEDIR/src/GroupModifier.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextFolderModel.h) \
+                 $$quote($$BASEDIR/src/ContextModel.h) \
                  $$quote($$BASEDIR/src/DeviceSettings.h) \
+                 $$quote($$BASEDIR/src/GroupModifier.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }
@@ -39,18 +51,24 @@ device {
 
 simulator {
     CONFIG(debug, debug|release) {
-        SOURCES +=  $$quote($$BASEDIR/src/ContextModel.cpp) \
+        SOURCES +=  $$quote($$BASEDIR/src/ContextFolderModel.cpp) \
+                 $$quote($$BASEDIR/src/ContextModel.cpp) \
                  $$quote($$BASEDIR/src/DeviceSettings.cpp) \
+                 $$quote($$BASEDIR/src/GroupModifier.cpp) \
                  $$quote($$BASEDIR/src/Helper.cpp) \
                  $$quote($$BASEDIR/src/NotificationManager.cpp) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.cpp) \
                  $$quote($$BASEDIR/src/TDList.cpp) \
                  $$quote($$BASEDIR/src/listModel.cpp) \
                  $$quote($$BASEDIR/src/main.cpp)
 
-        HEADERS +=  $$quote($$BASEDIR/src/ContextModel.h) \
+        HEADERS +=  $$quote($$BASEDIR/src/ContextFolderModel.h) \
+                 $$quote($$BASEDIR/src/ContextModel.h) \
                  $$quote($$BASEDIR/src/DeviceSettings.h) \
+                 $$quote($$BASEDIR/src/GroupModifier.h) \
                  $$quote($$BASEDIR/src/Helper.h) \
                  $$quote($$BASEDIR/src/NotificationManager.h) \
+                 $$quote($$BASEDIR/src/ShoppingListFunctionality.h) \
                  $$quote($$BASEDIR/src/TDList.hpp) \
                  $$quote($$BASEDIR/src/listModel.h)
     }

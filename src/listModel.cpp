@@ -25,9 +25,6 @@ ListModel* ListModel::Instance() {
 ListModel::ListModel()
 {
 
-	QStringList keyList;
-	keyList << "Status" << "DateCreated";
-
 	jda = new bb::data::JsonDataAccess;
 
 	QVariant folderList = jda->load(QDir::currentPath() +
@@ -73,7 +70,7 @@ int ListModel::getStatus (int id) {
 
 }
 
-int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinish, int isReminded) {
+int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinish, int isReminded, int quantity, int price, QStringList* taglist) {
 	//Creating the new task
 	QVariantMap newTask;
 	//newTask["taskId"] = QString::number(lastId+1);
@@ -82,7 +79,15 @@ int ListModel::addNewTask(int folder, QString description, QDateTime dateToFinis
 	newTask["Status"] = QString::number(2);
 	newTask["DateToFinish"] = dateToFinish.toTime_t();
 	newTask["DateCreated"] = QDateTime::currentDateTime().toTime_t();
+	newTask["Quantity"] = quantity;
+	newTask["Price"] = price;
+
+	if (taglist == NULL)
+		taglist = new QStringList;
+
+	newTask["Tags"] = *taglist;
 	newTask["Folder"] = folder;
+
 	//Insert before writing to Json
 	//To be able to write Json file
 
@@ -193,6 +198,7 @@ int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDa
 	updatedData["Description"] = newDescription;
 	updatedData["DateToFinish"] = newDateToFinish.toTime_t();
 
+
 	for (unsigned i = 0; i < m_fullDataList.size(); i++) {
 		if (m_fullDataList.at(i).toMap()["DateCreated"].toInt() == taskID) {
 			updatedData["DateCreated"] = m_fullDataList.at(i).toMap()["DateCreated"];
@@ -213,9 +219,11 @@ int ListModel::replaceEntry (int taskID, QString newDescription, QDateTime newDa
 	return 0;
 }
 
-void ListModel::addNewFolder (QString fName) {
+void ListModel::addNewFolder (QString fName, QString type) {
+
 	QVariantMap newItem;
 	newItem["FolderName"] = fName;
+	newItem["Type"] = type;
 	newItem["Id"] = QDateTime::currentDateTime().toTime_t();
 	m_folderList << newItem;
 	jda->save((QVariant)m_folderList, QDir::currentPath() +

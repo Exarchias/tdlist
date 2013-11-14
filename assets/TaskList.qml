@@ -29,7 +29,7 @@ Container {
             QTimer {
                 id: globalClickedTimer
                 interval: 1000
-                    
+                
                 onTimeout: {
                     listContainer.timedOut();
                 }            
@@ -70,7 +70,7 @@ Container {
                     }
                     else {
                         var datee = new Date();
-                        Model.addNewTask(CppHelper.getClickedFolderName(), descField.text, datee , 0);
+                        Model.addNewTask(CppHelper.getClickedFolderName(), descField.text, datee , 0, 5, 15);
                         descField.text = "";
                     }
                 }
@@ -126,6 +126,26 @@ Container {
             //Not the best way but I haven't found a better way to pass touched item to taskinfo page
             function passTouchedItem (taskId) {
                 CppHelper.setclickedTaskId(taskId) 	   
+            }
+            
+            function getDateToFinish (id) {
+                return FolderModel.getDateToFinish(id);
+            }
+            
+            function getDateCreated (id) {
+                return FolderModel.getDateCreated(id);
+            }
+            
+            function getPrice (id) {
+                return FolderModel.getPrice(id);
+            }
+            
+            function getQuantity (id) {
+                return FolderModel.getQuantity(id);
+            }
+            
+            function getId () {
+                return CppHelper.getClickedFolderName();
             }
             
             dataModel: GroupDataModel {
@@ -205,23 +225,53 @@ Container {
                                 
                                 preferredWidth: OrientationSupport.orientation == UIOrientation.Landscape ? taskCont.ListItem.view.getHeight() : taskCont.ListItem.view.getWidth()
                                 
-                                layout: DockLayout {
+                                layout: StackLayout {
+                                    orientation: LayoutOrientation.LeftToRight
                                 }
                                 
                                 Label {
                                     
                                     horizontalAlignment: HorizontalAlignment.Left
                                     verticalAlignment: VerticalAlignment.Center
-                                    
-                                    id: datetofinish
-                                    text: ListItemData.DateCreated
+                                    visible: taskCont.ListItem.view.getDateCreated (taskCont.ListItem.view.getId())
+                                    id: dateCreated
+                                    text: "Date Created: " + ListItemData.DateCreated
                                     textStyle {
                                         color: Color.Gray
                                         fontStyle: FontStyle.Italic
                                     }
                                 } 
-                            
-                            
+                                
+                                Label {
+                                    id: dueDate
+                                    text: "Due Date: " + ListItemData.DateToFinish
+                                    visible: taskCont.ListItem.view.getDateToFinish (taskCont.ListItem.view.getId())
+                                    
+                                    textStyle {
+                                        color: Color.Gray
+                                        fontStyle: FontStyle.Italic
+                                    }
+                                }
+                                
+                                Label {
+                                    id: priceLabel
+                                    text: "Price: " + ListItemData.Price
+                                    visible: taskCont.ListItem.view.getPrice (taskCont.ListItem.view.getId())
+                                    textStyle {
+                                        color: Color.Gray
+                                        fontStyle: FontStyle.Italic
+                                    }
+                                }
+                                
+                                Label {
+                                    id: quantityLabel
+                                    text: "Quantity: " + ListItemData.Quantity
+                                    visible: taskCont.ListItem.view.getQuantity (taskCont.ListItem.view.getId())
+                                    textStyle {
+                                        color: Color.Gray
+                                        fontStyle: FontStyle.Italic
+                                    }
+                                }    
                             }
                             
                             gestureHandlers: [
@@ -292,13 +342,13 @@ Container {
                                     }
                                     else if (chkbox.checked == checkbox.changedValue && chkbox.checked == false) {
                                         taskCont.ListItem.view.parent.checkStat (ListItemData.DateCreated, "2");    
-                                        taskCont.ListItem.view.globalClickedTimer.parent.stopTimer ();
+                                        taskCont.ListItem.view.parent.stopTimer ();
                                     }         
                                 
                                 }
                             
                             }
-
+                        
                         }
                     
                     } // end of second ListItemComponent
